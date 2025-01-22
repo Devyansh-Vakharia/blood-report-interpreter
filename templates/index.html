@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF File Upload</title>
+  <link rel="stylesheet" href="/static/styles.css"> 
+</head>
+<body>
+  <div class="upload-container">
+    <h1>Upload PDF and Get Generated Text</h1>
+    <form method="POST" action="/upload" enctype="multipart/form-data">
+      <input type="file" name="file" accept="application/pdf" required />
+      <br><br>
+      <input type="submit" value="Upload PDF">
+    </form>
+
+    {% if generated_text %}
+      <h2>Generated Text</h2>
+      <p>{{ generated_text }}</p>
+    {% endif %}
+</body>
+</html>
