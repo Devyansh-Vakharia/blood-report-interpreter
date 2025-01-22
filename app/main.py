@@ -54,6 +54,6 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     except Exception as e:
         return f"<h1>Error: {e}</h1>"
 
-if __name__ == "__main__":
-    webbrowser.open("http://localhost:8000")
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, log_level="debug", reload=True)
+# if __name__ == "__main__":
+#     webbrowser.open("http://localhost:8000")
+#     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, log_level="debug", reload=True)
