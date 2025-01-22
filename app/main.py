@@ -1,7 +1,5 @@
 import os
-import webbrowser
 import pdfplumber
-import json
 import google.generativeai as genai
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Request
