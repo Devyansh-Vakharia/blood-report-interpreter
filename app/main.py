@@ -1,4 +1,5 @@
 import os
+import webbrowser
 import pdfplumber
 import json
 import google.generativeai as genai
@@ -6,7 +7,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-import fixed_prompts
+import uvicorn
+from app import fixed_prompts
 
 load_dotenv()
 
@@ -18,7 +20,7 @@ if not api_key:
 genai.configure(api_key=api_key)
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="./app/templates")
 
 # Home route to display the form
 @app.get("/", response_class=HTMLResponse)
@@ -52,3 +54,6 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     except Exception as e:
         return f"<h1>Error: {e}</h1>"
 
+if __name__ == "__main__":
+    webbrowser.open("http://localhost:8000")
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, log_level="debug", reload=True)
