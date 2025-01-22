@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-import uvicorn
 from app import fixed_prompts
 
 load_dotenv()
