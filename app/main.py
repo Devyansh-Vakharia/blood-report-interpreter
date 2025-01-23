@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from app import fixed_prompts
+from fastapi.staticfiles import StaticFiles
+import fixed_prompts
 
 load_dotenv()
 
@@ -17,7 +18,9 @@ if not api_key:
 genai.configure(api_key=api_key)
 
 app = FastAPI()
-templates = Jinja2Templates(directory="./app/templates")
+templates = Jinja2Templates(directory="./templates")
+app.mount("/static",StaticFiles(directory="./static"),name="static")
+
 
 # Home route to display the form
 @app.get("/", response_class=HTMLResponse)
