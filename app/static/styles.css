@@ -1,14 +1,16 @@
 .messageBox {
-    width: fit-content;
-    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: white;
-    padding: 0 15px;
+    width: fit-content;
+    min-height: 40px;
+    max-height: 150px;
+    background-color: rgb(244, 244, 244);
     border-radius: 10px;
+    padding: 0 15px;
     border: 1px solid rgb(63, 63, 63);
-  }
+}
+
   .messageBox:focus-within {
     border: 1px solid rgb(110, 110, 110);
   }
@@ -68,14 +70,23 @@
     transition: all 0.3s;
   }
   #messageInput {
-    width: 200px;
-    height: 100%;
+    width: 400px;
+    height: 21px; /* Initial height for 1 line */
+    max-height: 147px; /* 7 lines (21px * 7) */
     background-color: transparent;
     outline: none;
     border: none;
+    resize: none;
     padding-left: 10px;
     color: black;
-  }
+    line-height: 21px; /* Fixed line height */
+    overflow-y: hidden; /* Hide scrollbar initially */
+    word-wrap: break-word;
+    white-space: pre-wrap; /* Allow wrapping without breaking words */
+}
+
+
+
   #messageInput:focus ~ #sendButton svg path,
   #messageInput:valid ~ #sendButton svg path {
     fill: #3c3c3c;
@@ -110,7 +121,6 @@
     justify-content: space-between;
     margin-top: 10px;
     padding: 10px;
-    background-color: #f9f9f9;
     border: 1px solid #ccc;
     border-radius: 5px;
   }
@@ -122,18 +132,28 @@
     color: #333;
   }
   #removeFileButton {
-    background-color: white;
+    background-color: transparent;
     color: white;
     border: none;
-    padding: 3px 5px;
+    padding: 0;
     border-radius: 5px;
     cursor: pointer;
     font-size: 12px;
-    width: 20px;
-    height: 20px;
-    object-fit: cover;
+    width: 18px;  /* Adjust width */
+    height: 18px;  /* Adjust height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #removeFileButton:focus-within {
+    border: 1px solid rgb(110, 110, 110);
+  }
+  #removeFileButton img {
+    width: 14px;  /* Image size */
+    height: 14px; /* Image size */
+    object-fit: contain;
   }
   #removeFileButton:hover {
-    background-color: white;
+    background-color: whitesmoke;
   }
   
