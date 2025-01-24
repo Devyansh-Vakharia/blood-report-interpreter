@@ -4,17 +4,61 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PDF File Upload</title>
-  <link rel="stylesheet" href="/app/static/styles.css"> 
+  <link rel="stylesheet" href="/static/styles.css"> 
 </head>
 <body>
   <div class="upload-container">
+    <form action="/upload" enctype="multipart/form-data" method="POST">
     <h1>Blood Report Interpreter</h1>
-    <form method="POST" action="/upload" enctype="multipart/form-data">
-      <input type="file" name="file" accept="application/pdf" required />
-      <br><br>
-      <input type="submit" value="Upload PDF">
+    <div class="messageBox">
+      <div class="fileUploadWrapper">
+        <label for="file">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 337 337">
+            <circle
+              stroke-width="20"
+              stroke="#6c6c6c"
+              fill="none"
+              r="158.5"
+              cy="168.5"
+              cx="168.5"
+            ></circle>
+            <path
+              stroke-linecap="round"
+              stroke-width="25"
+              stroke="#6c6c6c"
+              d="M167.759 79V259"
+            ></path>
+            <path
+              stroke-linecap="round"
+              stroke-width="25"
+              stroke="#6c6c6c"
+              d="M79 167.138H259"
+            ></path>
+          </svg>
+          <span class="tooltip">Upload PDF</span>
+        </label>
+        <input type="file" id="file" name="file" accept="application/pdf" required />
+      </div>
+      <input  placeholder="Message..." type="text" id="messageInput" />
+      <button type="submit" id="sendButton">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 664 663">
+          <path
+            fill="none"
+            d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
+          ></path>
+          <path
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            stroke-width="33.67"
+            stroke="#6c6c6c"
+            d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
+          ></path>
+        </svg>
+      </button>
     </form>
-
+    </div>
+    
+    
     {% if generated_text %}
       <h2>Generated Text</h2>
       <p>{{ generated_text }}</p>
