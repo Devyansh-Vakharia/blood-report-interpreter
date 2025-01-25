@@ -1,46 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PDF File Upload</title>
-  <link rel="stylesheet" href="/static/styles.css">
+  <title>Blood Report Interpreter</title>
+  <link rel="stylesheet" href="../static/styles.css">
 </head>
+
 <body>
-  <div class="upload-container">
+  <div class="chat-container">
+    <h1>Blood Report Interpreter</h1>
+    <!-- Chat messages will be displayed here -->
+  </div>
+  <div class="input-container">
     <form action="/upload" enctype="multipart/form-data" method="POST">
-      <h1>Blood Report Interpreter</h1>
       <div class="messageBox">
-        <div class="fileUploadWrapper">
-          <label for="file">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 337 337">
-              <circle stroke-width="20" stroke="#6c6c6c" fill="none" r="158.5" cy="168.5" cx="168.5"></circle>
-              <path stroke-linecap="round" stroke-width="25" stroke="#6c6c6c" d="M167.759 79V259"></path>
-              <path stroke-linecap="round" stroke-width="25" stroke="#6c6c6c" d="M79 167.138H259"></path>
-            </svg>
-            <span class="tooltip">Upload PDF</span>
-          </label>
-          <input type="file" id="file" name="file" accept="application/pdf" required />
-        </div>
+
+        <!-- File upload container -->
         <div id="selectedFileContainer" class="selectedFileContainer hidden">
           <span id="selectedFileName"></span>
-          <img src="static/remove.png/" id="removeFileButton"></img>
+          <button id="removeFileButton">
+            <img
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXIteCI+PGxpbmUgeDE9IjE4IiB5MT0iNiIgeDI9IjYiIHkyPSIxOCI+PC9saW5lPjxsaW5lIHgxPSI2IiB5MT0iNiIgeDI9IjE4IiB5Mj0iMTgiPjwvbGluZT48L3N2Zz4="
+              alt="Remove file">
+          </button>
         </div>
-        <!-- <input placeholder="Message..." type="text" id="messageInput" /> -->
-        <textarea placeholder="Message..." id="messageInput" cols="50" rows="5"></textarea>
-        <button type="submit" id="sendButton">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 664 663">
-            <path fill="none" d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"></path>
-            <path stroke-linejoin="round" stroke-linecap="round" stroke-width="33.67" stroke="#6c6c6c" d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"></path>
-          </svg>
-        </button>
+
+        <!-- Message input -->
+        <textarea id="messageInput" placeholder="Type your message..." rows="1"></textarea>
+
+        <!-- File upload and send button -->
+        <div class="actions">
+          <div class="fileUploadWrapper">
+            <label for="file">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+              </svg>
+            </label>
+
+            <input type="file" id="file" name="file" accept="application/pdf" required />
+          </div>
+          <button type="submit" id="sendButton">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </button>
+        </div>
+
       </div>
-      {% if generated_text %}
-        <h2>Generated Text</h2>
-        <p>{{ generated_text }}</p>
-      {% endif %}
     </form>
   </div>
-  <script src="/static/script.js"></script>
+  <script src="../static/script.js"></script>
 </body>
+
 </html>

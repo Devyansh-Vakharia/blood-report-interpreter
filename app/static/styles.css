@@ -1,159 +1,143 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f0f0f0;
+}
+
+.chat-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.input-container {
+  position: sticky;
+  bottom: 0;
+  background-color: #fff;
+
+  padding: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
 .messageBox {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: fit-content;
-    min-height: 40px;
-    max-height: 150px;
-    background-color: rgb(244, 244, 244);
-    border-radius: 10px;
-    padding: 0 15px;
-    border: 1px solid rgb(63, 63, 63);
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  padding: 8px 12px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
-  .messageBox:focus-within {
-    border: 1px solid rgb(110, 110, 110);
-  }
-  .fileUploadWrapper {
-    width: fit-content;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-  #file {
-    display: none;
-  }
-  .fileUploadWrapper label {
-    cursor: pointer;
-    width: fit-content;
-    height: fit-content;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-  .fileUploadWrapper label svg {
-    height: 18px;
-  }
-  .fileUploadWrapper label svg path {
-    transition: all 0.3s;
-  }
-  .fileUploadWrapper label svg circle {
-    transition: all 0.3s;
-  }
-  .fileUploadWrapper label:hover svg path {
-    stroke: #fff;
-  }
-  .fileUploadWrapper label:hover svg circle {
-    stroke: #fff;
-    fill: #3c3c3c;
-  }
-  .fileUploadWrapper label:hover .tooltip {
-    display: block;
-    opacity: 1;
-  }
-  .tooltip {
-    position: absolute;
-    top: -40px;
-    display: none;
-    opacity: 0;
-    color: white;
-    font-size: 10px;
-    text-wrap: nowrap;
-    background-color: #000;
-    padding: 6px 10px;
-    border: 1px solid #3c3c3c;
-    border-radius: 5px;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.596);
-    transition: all 0.3s;
-  }
-  #messageInput {
-    width: 400px;
-    height: 21px; /* Initial height for 1 line */
-    max-height: 147px; /* 7 lines (21px * 7) */
-    background-color: transparent;
-    outline: none;
-    border: none;
-    resize: none;
-    padding-left: 10px;
-    color: black;
-    line-height: 21px; /* Fixed line height */
-    overflow-y: hidden; /* Hide scrollbar initially */
-    word-wrap: break-word;
-    white-space: pre-wrap; /* Allow wrapping without breaking words */
+.messageBox:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
+form {
+  width: 60%;
+  margin: 0 auto;
+}
 
-  #messageInput:focus ~ #sendButton svg path,
-  #messageInput:valid ~ #sendButton svg path {
-    fill: #3c3c3c;
-    stroke: white;
-  }
-  #sendButton {
-    width: fit-content;
-    height: 100%;
-    background-color: transparent;
-    outline: none;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  #sendButton svg {
-    height: 18px;
-    transition: all 0.3s;
-  }
-  #sendButton svg path {
-    transition: all 0.3s;
-  }
-  #sendButton:hover svg path {
-    fill: #3c3c3c;
-    stroke: white;
-  }
-  .selectedFileContainer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  .selectedFileContainer.hidden {
-    display: none;
-  }
-  #selectedFileName {
-    font-size: 14px;
-    color: #333;
-  }
-  #removeFileButton {
-    background-color: transparent;
-    color: white;
-    border: none;
-    padding: 0;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-    width: 18px;  /* Adjust width */
-    height: 18px;  /* Adjust height */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  #removeFileButton:focus-within {
-    border: 1px solid rgb(110, 110, 110);
-  }
-  #removeFileButton img {
-    width: 14px;  /* Image size */
-    height: 14px; /* Image size */
-    object-fit: contain;
-  }
-  #removeFileButton:hover {
-    background-color: whitesmoke;
-  }
-  
+#messageInput {
+  flex-grow: 1;
+  height: 24px;
+  width: 100%;
+  max-height: 200px;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  resize: none;
+  padding: 0;
+  color: #1f2937;
+  line-height: 1.5;
+  overflow-y: auto;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fileUploadWrapper label,
+#sendButton {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.fileUploadWrapper label:hover,
+#sendButton:hover {
+  background-color: #f3f4f6;
+}
+
+.fileUploadWrapper svg,
+#sendButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+#file {
+  display: none;
+}
+
+.selectedFileContainer {
+  width: 50%;
+  margin-top: 8px;
+  padding: 8px;
+  margin-bottom: 1rem;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.selectedFileContainer.hidden {
+  display: none;
+}
+
+#selectedFileName {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+#removeFileButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+}
+
+#removeFileButton:hover {
+  background-color: #e5e7eb;
+}
+
+#removeFileButton img {
+  width: 16px;
+  height: 16px;
+}
