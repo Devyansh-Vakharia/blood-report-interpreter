@@ -49,7 +49,10 @@
             </svg>
           </button>
         </div>
-
+        {% if generated_text %}
+        <h2>Generated Text</h2>
+        <p>{{ generated_text }}</p>
+        {% endif %}
       </div>
     </form>
   </div>
