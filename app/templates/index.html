@@ -5,58 +5,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blood Report Interpreter</title>
-  <link rel="stylesheet" href="../static/styles.css">
+  <link rel="stylesheet" href="/static/styles.css">
 </head>
 
 <body>
-  <div class="chat-container">
-    <h1>Blood Report Interpreter</h1>
-    <!-- Chat messages will be displayed here -->
-  </div>
-  <div class="input-container">
-    <form action="/upload" enctype="multipart/form-data" method="POST">
-      <div class="messageBox">
-
-        <!-- File upload container -->
-        <div id="selectedFileContainer" class="selectedFileContainer hidden">
-          <span id="selectedFileName"></span>
-          <button id="removeFileButton">
-            <img
-              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXIteCI+PGxpbmUgeDE9IjE4IiB5MT0iNiIgeDI9IjYiIHkyPSIxOCI+PC9saW5lPjxsaW5lIHgxPSI2IiB5MT0iNiIgeDI9IjE4IiB5Mj0iMTgiPjwvbGluZT48L3N2Zz4="
-              alt="Remove file">
-          </button>
-        </div>
-
-        <!-- Message input -->
-        <textarea id="messageInput" placeholder="Type your message..." rows="1"></textarea>
-
-        <!-- File upload and send button -->
-        <div class="actions">
-          <div class="fileUploadWrapper">
-            <label for="file">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-              </svg>
-            </label>
-
-            <input type="file" id="file" name="file" accept="application/pdf" required />
-          </div>
-          <button type="submit" id="sendButton">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
-          </button>
-        </div>
-        {% if generated_text %}
+  <div class="container">
+    <div class="title">
+      <h1>Blood Report Interpreter</h1>
+    </div>
+    <div class="chat-container">
+      <!-- Chat messages will be displayed here -->
+      <!-- {% if generated_text %}
         <h2>Generated Text</h2>
         <p>{{ generated_text }}</p>
-        {% endif %}
+      {% endif %} -->
+      <div class="chat-left">
+        <div class="chat">
+          {% if generated_text %}
+            <h2>Generated Text</h2>
+            <p>{{ generated_text }}</p>
+          {% endif %}
+        </div>
       </div>
-    </form>
+      <div class="chat-right">
+        <div class="chat">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde, veniam quibusdam ipsa, architecto rerum suscipit
+          nam facere vel repellendus est nesciunt consequatur nostrum fugiat ut, op sequi quae tenetur. Assumenda?
+        </div>
+      </div>
+    </div>
+    <div class="input-container">
+      <form action="/upload" enctype="multipart/form-data" method="POST">
+        <div class="messageBox">
+
+          <!-- File upload container -->
+          <div id="selectedFileContainer" class="selectedFileContainer hidden">
+            <span id="selectedFileName"></span>
+            <button id="removeFileButton">
+              <img
+                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXIteCI+PGxpbmUgeDE9IjE4IiB5MT0iNiIgeDI9IjYiIHkyPSIxOCI+PC9saW5lPjxsaW5lIHgxPSI2IiB5MT0iNiIgeDI9IjE4IiB5Mj0iMTgiPjwvbGluZT48L3N2Zz4="
+                alt="Remove file">
+            </button>
+          </div>
+
+          <!-- Message input -->
+          <textarea id="messageInput" placeholder="Type your message..." rows="1"></textarea>
+          
+
+          <!-- File upload and send button -->
+          <div class="actions">
+            <div class="fileUploadWrapper">
+              <label for="file">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                </svg>
+              </label>
+
+              <input type="file" id="file" name="file" accept="application/pdf" required />
+            </div>
+            <button type="submit" id="sendButton">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-  <script src="../static/script.js"></script>
+  <script src="/static/script.js"></script>
 </body>
 
 </html>
