@@ -15,10 +15,6 @@
     </div>
     <div class="chat-container">
       <!-- Chat messages will be displayed here -->
-      <!-- {% if generated_text %}
-        <h2>Generated Text</h2>
-        <p>{{ generated_text }}</p>
-      {% endif %} -->
       <div class="chat-left">
         <div class="chat">
           {% if generated_text %}
@@ -29,8 +25,10 @@
       </div>
       <div class="chat-right">
         <div class="chat">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde, veniam quibusdam ipsa, architecto rerum suscipit
-          nam facere vel repellendus est nesciunt consequatur nostrum fugiat ut, op sequi quae tenetur. Assumenda?
+          {% if message_input %}
+            <h2>Message Input:</h2>
+            <p>{{ message_input }}</p>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -49,8 +47,7 @@
           </div>
 
           <!-- Message input -->
-          <textarea id="messageInput" placeholder="Type your message..." rows="1"></textarea>
-          
+          <textarea id="messageInput" name="messageInput" placeholder="Type your message..." rows="1">{{ message_input }}</textarea>
 
           <!-- File upload and send button -->
           <div class="actions">
@@ -62,7 +59,7 @@
                 </svg>
               </label>
 
-              <input type="file" id="file" name="file" accept="application/pdf" required />
+              <input type="file" id="file" name="file" accept="application/pdf" />
             </div>
             <button type="submit" id="sendButton">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
