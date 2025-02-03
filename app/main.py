@@ -2,13 +2,14 @@ import os
 import webbrowser
 import pdfplumber
 import google.generativeai as genai
+import json
+import re
 from dotenv import load_dotenv
-from fastapi import FastAPI, File,Form, UploadFile, Request
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, File, Form, UploadFile, Request
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-
-from app.fixed_prompts import prompt as fixed_prompt1
+from app.fixed_prompts import prompt as fixed_prompt1, prompt1 as fixed_prompt2
 import uvicorn
 
 load_dotenv()
@@ -22,7 +23,7 @@ genai.configure(api_key=api_key)
 
 app = FastAPI()
 templates = Jinja2Templates(directory="./app/templates")
-app.mount("/static",StaticFiles(directory="./app/static"),name="static")
+app.mount("/static", StaticFiles(directory="./app/static"), name="static")
 
 
 # Home route to display the form
@@ -30,69 +31,89 @@ app.mount("/static",StaticFiles(directory="./app/static"),name="static")
 async def read_form(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
- 
-@app.post("/upload", response_class=HTMLResponse)
-async def upload_file(request: Request, file: UploadFile = None, messageInput: str = Form(...)):
+@app.post("/", response_class=JSONResponse)
+async def upload_file(request: Request, file: UploadFile = None, messageInput: str = Form(None)):
+    # Initialize the response variable to ensure all paths assign it
+    structured_response = {
+        "error": None,
+        "summary": None,
+        "deficiencies": None,
+        "recommendations": None,
+        "important_note": None,
+        "query_response": None
+    }
+    
     try:
-        generated_text = ""
-
-        # If a file is uploaded, validate it
+        # If a file is provided
         if file:
             if not file.filename.endswith(".pdf"):
-                return templates.TemplateResponse("index.html", {
-                    "request": request,
-                    "generated_text": "Error: The uploaded file is not a valid PDF.",
-                    "message_input": messageInput
-                })
+                structured_response["error"] = "The uploaded file is not a valid PDF."
+                return JSONResponse(content=structured_response)
 
-            try:
-                pdf_text = ""
-                with pdfplumber.open(file.file) as pdf:
-                    for page in pdf.pages:
-                        pdf_text += page.extract_text()
+            # Extract text from the PDF
+            pdf_text = ""
+            with pdfplumber.open(file.file) as pdf:
+                for page in pdf.pages:
+                    pdf_text += page.extract_text()
 
-                if not pdf_text.strip():
-                    return templates.TemplateResponse("index.html", {
-                        "request": request,
-                        "generated_text": "Error: The PDF is empty or cannot be read.",
-                        "message_input": messageInput
-                    })
+            # If the PDF content is empty or cannot be read
+            if not pdf_text.strip():
+                structured_response["error"] = "The PDF is empty or cannot be read."
+                return JSONResponse(content=structured_response)
 
-                # Check for blood report keywords in the PDF text
-                blood_report_keywords = ["hemoglobin", "glucose", "white blood cell", "platelet", "red blood cell", "WBC", "RBC", "cholesterol", "count", "CBC"]
-                if any(keyword.lower() in pdf_text.lower() for keyword in blood_report_keywords):
-                    prompt = f"{fixed_prompt1} {pdf_text}"
-                    response = genai.GenerativeModel(model_name="gemini-1.5-flash").generate_content([prompt])
-                    generated_text = response.text
-                else:
-                    generated_text = "Please upload a PDF of a Blood Report for simple understanding about your health."
+            # Check for blood report-related keywords
+            blood_report_keywords = [
+                "hemoglobin", "glucose", "white blood cell", "platelet", "red blood cell",
+                "WBC", "RBC", "cholesterol", "count", "CBC"
+            ]
+            if any(keyword.lower() in pdf_text.lower() for keyword in blood_report_keywords):
+                prompt = f"""{fixed_prompt1}
+                Please return the response in JSON format with the following structure:
+                {{
+                    "summary": "Brief explanation of key findings",
+                    "deficiencies": [ "List of detected deficiencies" ],
+                    "recommendations": [ "Suggested medicines, nutrients, or meals" ],
+                    "important_note": "Reminder that AI is not a doctor"
+                }}
+                PDF Content:
+                {pdf_text}
+                """
+                response = genai.GenerativeModel(model_name="gemini-1.5-flash").generate_content([prompt])
+                generated_text = response.text.strip()
 
-            except Exception as e:
-                return templates.TemplateResponse("index.html", {
-                    "request": request,
-                    "generated_text": f"Error: Unable to process the PDF. Details: {str(e)}",
-                    "message_input": messageInput
-                })
+                # Try extracting JSON from AI response
+                try:
+                    # Use regex to find a valid JSON part in the response
+                    json_match = re.search(r'(\{.*\})', generated_text, re.DOTALL)
+                    if json_match:
+                        structured_response.update(json.loads(json_match.group(1)))  # Convert to JSON
+                    else:
+                        structured_response["error"] = "AI response did not return valid JSON."
+                except json.JSONDecodeError:
+                    structured_response["error"] = "Unable to parse AI response into JSON."
+            else:
+                structured_response["error"] = "Not a valid blood report PDF."
 
-        # If no file is uploaded, use the message input as the generated text
-        if not generated_text:
-            generated_text = messageInput
+        # Add messageInput to response if it's provided
+        if messageInput:
+            query_prompt = (
+                f"{fixed_prompt2}\n"
+                f"Read the following PDF content and address the user's query: '{messageInput}'.\n"
+                f"PDF Content: {pdf_text}\n"
+                f"Provide a clear, concise, and accurate response based on the information in the PDF."
+                )
 
-        # Render the template with both inputs
-        return templates.TemplateResponse("index.html", {
-            "request": request,
-            "generated_text": generated_text,
-            "message_input": messageInput
-        })
+            query_response = genai.GenerativeModel(model_name="gemini-1.5-flash").generate_content([query_prompt])
+            generated_query_response = query_response.text.strip()
+
+            structured_response["query_response"] = generated_query_response
+
+        return JSONResponse(content=structured_response)
 
     except Exception as e:
-        return templates.TemplateResponse("index.html", {
-            "request": request,
-            "generated_text": f"An unexpected error occurred: {str(e)}",
-            "message_input": messageInput
-        })
-
-
+        # Catch any unexpected exceptions
+        structured_response["error"] = str(e)
+        return JSONResponse(content=structured_response)
 
 
 if __name__ == "__main__":
