@@ -1,0 +1,56 @@
+/* sidebar */
+
+.sidebar {
+    background-color: var(--secondary-color);
+    width: 17%;
+    border-right: .01rem solid #e3e3e3;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .8rem;
+    padding: 1rem;
+}
+
+.close-sidebar {
+    font-size: 1.9rem;
+    color: var(--text-color);
+    margin-left: -2rem;
+}
+
+.logo-ico {
+    font-size: 2rem;
+    color: var(--text-color);
+}
+
+.history {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.plus-ico {
+    font-size: 1.5rem;
+    color: black;
+}
+
+.new-chat {
+    display: flex;
+    align-items: center;
+    gap: .2rem;
+    width: 90%;
+    padding: .7rem;
+    border-radius: .6rem;
+    background: transparent;
+    color: black;
+    cursor: pointer;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+    /* color: var(--sec-text-clr); */
+}

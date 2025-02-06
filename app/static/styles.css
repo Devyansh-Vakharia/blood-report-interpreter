@@ -2,170 +2,294 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: sans-serif;
+  font-family: "Poppins", serif;
+}
+
+:root {
+  --text-color: #0d0d0D;
+  --sec-text-clr: rgb(243, 243, 243);
+  --primary-color: white;
+  --secondary-color: #e3e3e3;
+  --primary-foreground-clr: black;
+  --secondary-foreground-clr: ;
+
+  --primary-font: .7rem;
 }
 
 body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: var(--primary-color);
 }
 
 .container {
-  padding: 16px;
   display: flex;
-  flex-direction: column;
-  flex: auto;
+  width: 100%;
+  height: 100%;
 }
 
-.chat-container {
-  flex: auto;
+.main {
+  position: relative;
+  width: 83%;
 }
 
-h1 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-
-.input-container {
-  position: sticky;
-  bottom: 0;
-  padding: 20px;
-}
-
-.messageBox {
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  border: 1px solid #e3e3e3;
-  padding: 8px 12px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
-
-/* .messageBox:focus-within {
-  border-color: black;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-} */
-
-.actions {
+.main-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 3rem;
+  padding: .5rem;
 }
 
-form {
-  width: 60%;
+.model-container {
+  background-color: transparent;
+  padding: .4rem .6rem;
+  border-radius: .5rem;
+}
+
+.model {
+  font-size: .9rem;
+  color: #5D5D5D;
+  font-weight: 600;
+}
+
+.chat-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  max-width: 60%;
+  height: 77%;
   margin: 0 auto;
+  overflow-y: scroll;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chat-container::-webkit-scrollbar {
+  display: none;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+}
+
+.chat-left, .chat-right {
+  display: flex;
+  justify-content: flex-start;
+  padding: 1rem;
+  margin: 5px 0;
+}
+
+.chat-left {
+  justify-content: flex-start;
+}
+
+.chat-right {
+  justify-content: flex-end;
+}
+
+.chat-content-left {
+  max-width: 70%;
+  padding: 10px;
+  border-radius: 10px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  font-size: 14px;
+  max-height: auto;
+}
+
+.chat-content-right {
+  max-width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  max-height: auto;
+}
+
+.chat-content-left {
+  background: #73737347;
+  color: #c1c1c5;
+}
+
+.chat-content-right {
+  background: #21212173;
+  color: white;
+}
+
+.input-container {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  max-width: 800px;
+}
+
+.messageBox {
+  background-color: var(--primary-color);
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,.1);
+  padding: 8px 12px;
+  box-shadow: 0 9px 9px 0px rgba(0,0,0,.01),0 2px 5px 0px rgba(0,0,0,.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.input-wrapper {
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 #messageInput {
-  flex-grow: 1;
-  height: 24px;
   width: 100%;
-  max-height: 140px;
+  min-height: 24px;
+  max-height: none;
   background-color: transparent;
   outline: none;
   border: none;
   resize: none;
   padding: 0;
-  color: #1f2937;
+  color: var(--text-color);
   line-height: 1.5;
-  overflow-y: auto;
+  font-size: 16px;
 }
 
 .actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  margin-top: 8px;
 }
 
-.fileUploadWrapper label,
-#sendButton {
-  cursor: pointer;
+.fileUploadWrapper {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
+  cursor: pointer;
 }
 
-.fileUploadWrapper label:hover,
-#sendButton:hover {
-  background-color: white
+.fileUploadWrapper i {
+  font-size: 20px;
+  color: black;
 }
 
-.fileUploadWrapper svg,
-#sendButton svg {
-  width: 20px;
-  height: 20px;
-}
-
-#file {
+.fileUploadWrapper input[type="file"] {
   display: none;
 }
 
 .selectedFileContainer {
-  width: 50%;
-  margin-top: 8px;
+  margin-bottom: 8px;
   padding: 8px;
-  margin-bottom: 1rem;
-  background-color: #f3f4f6;
+  background-color: #e3e3e3;
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 4rem;
+  max-width: 100%; /* Ensure it doesn't overflow */
+  overflow: hidden; /* Hide any content that overflows */
+  text-overflow: ellipsis; /* Add ellipsis for overflowed text */
+}
+
+.file-container {
+  position: relative;
+  border-radius: .5rem;
+  display: flex;
+  padding: .4rem;
+  height: 100%;
+  align-items: center;
+  background-color: white;
+}
+
+.rm-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+  background: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.selectedFileName {
+  font-size: .6rem;
+  max-width: 80%; /* Limit the width to prevent overflow */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ellipsis when text overflows */
+  white-space: nowrap; /* Prevent text from wrapping to a new line */
+}
+
+.rm-x {
+  font-size: 2rem;
+  color: black;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pdf-icon {
+  font-size: 2rem;
+  color: gray;
 }
 
 .selectedFileContainer.hidden {
   display: none;
 }
 
-#selectedFileName {
-  font-size: 14px;
-  color: #4b5563;
-}
-
-#removeFileButton {
+.rounded {
+  width: 2.3rem;
+  height: 2.3rem;
   background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: .4rem;
+}
+
+.rounded:hover {
+  background-color: #e3e3e3;
+}
+
+.sendButton i {
+  font-size: 20px;
+  color: black;
+}
+
+.sendButton {
+  background: none;
   border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.3rem;
+  width: 2.3rem;
+  background-color: transparent;
+  border-radius: .4rem;
   cursor: pointer;
-  padding: 2px;
+  transition: all .2s ease-in;
 }
 
-#removeFileButton:hover {
-  background-color: #e5e7eb;
+.sendButton:hover {
+  background-color: #e3e3e3;
 }
 
-#removeFileButton img {
-  width: 16px;
-  height: 16px;
+.default-msg {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 10rem;
+  color: white;
 }
 
-.chat-left {
-  flex: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  margin-bottom: 16px;
+.default-desc {
+  font-size: .9rem;
+  color: #c1c1c5;
+  text-align: center;
 }
 
-.chat-right {
-  flex: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-}
-
-.chat {
-  width: 600px;
-  padding: 16px;
-  background: #f4f4f4;
-  border-radius: 5px;
-  border-width: 1px;
-  border-style: solid;
-  text-align: justify;
+.hidden {
+  display: none;
 }
