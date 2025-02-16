@@ -1,122 +1,114 @@
-
 document.addEventListener("DOMContentLoaded", () => {
-  const fileUploader = document.querySelector("#file-uploader");
-  const fileInput = document.querySelector("#file");
-  const selectedFileContainer = document.querySelector("#selectedFileContainer");
-  const selectedFileName = document.querySelector("#selectedFileName");
-  const removeFileButton = document.querySelector("#removeFileButton");
+  const fileInput = document.getElementById("file");
+  const selectedFileContainer = document.getElementById("selectedFileContainer");
+  const selectedFileName = document.getElementById("selectedFileName");
+  const removeFileButton = document.getElementById("removeFileButton");
   const textarea = document.getElementById("messageInput");
-  const uploadForm = document.getElementById("uploadForm");
-  const defaultUi = document.querySelector(".default-message");
+  const chatArea = document.getElementById("chatArea");
+  const form = document.getElementById("uploadForm");
 
-  function adjustTextareaHeight() {
-      textarea.style.height = "auto";
-      textarea.style.height = textarea.scrollHeight + "px";
-  }
+  // File upload button click event
+  document.getElementById("file-uploader").addEventListener("click", () => {
+      fileInput.click();
+  });
 
-  textarea.addEventListener("input", adjustTextareaHeight);
-
+  // Handle file selection
   fileInput.addEventListener("change", (event) => {
       const file = event.target.files[0];
       if (file) {
-          selectedFileContainer.classList.remove("hidden");
           selectedFileName.textContent = file.name;
+          selectedFileContainer.classList.remove("hidden");
       }
   });
 
-  fileUploader.addEventListener("click", () => fileInput.click());
+  // Remove selected file
+  removeFileButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      fileInput.value = "";
+      selectedFileName.textContent = "";
+      selectedFileContainer.classList.add("hidden");
+  });
 
-  removeFileButton.addEventListener("click", () => {
+  // Auto-expand textarea on input
+  textarea.addEventListener("input", function () {
+      this.style.height = "auto";
+      this.style.height = this.scrollHeight + "px";
+  });
+
+  // Handle form submission
+form.addEventListener("submit", async function (event) {
+      event.preventDefault(); // Prevent default form submission
+
+      const formData = new FormData();
+      if (fileInput.files.length > 0) {
+          formData.append("file", fileInput.files[0]);
+      }
+      if (textarea.value.trim() !== "") {
+          formData.append("messageInput", textarea.value.trim());
+      }
+
+      // Show user query in chat
+      if (textarea.value.trim() !== "") {
+          displayMessage("You: " + textarea.value, "user-message");
+      }
+
+      try {
+          const response = await fetch("/", {
+              method: "POST",
+              body: formData,
+          });
+
+          const data = await response.json();
+
+          if (data.error) {
+              displayMessage("❌ Error: " + data.error, "error-message");
+          } else {
+              displayFormattedResponse(data);
+          }
+      } catch (error) {
+          displayMessage("❌ Failed to fetch response!", "error-message");
+      }
+
+      // Clear input fields after sending
+      textarea.value = "";
       fileInput.value = "";
       selectedFileContainer.classList.add("hidden");
-      selectedFileName.textContent = "";
   });
 
-  textarea.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" && !event.shiftKey) {
-          event.preventDefault();
-          sendMessage();
-      }
-  });
-
-  uploadForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      sendMessage();
-  });
-
-  function sendMessage() {
-      const message = textarea.value.trim();
-      const file = fileInput.files[0];
-
-      console.log("User message:", message);
-
-      if (message || file) {
-          const formData = new FormData(uploadForm);
-          console.log("Submitting form data:", Object.fromEntries(formData));
-
-          appendMessage(message, "user");
-
-          textarea.value = "";
-          fileInput.value = "";
-          selectedFileContainer.classList.add("hidden");
-          selectedFileName.textContent = "";
-          adjustTextareaHeight();
-          defaultUi.classList.add("hidden");
-
-          const botResponse = getBotResponse(message.toLowerCase());
-
-          setTimeout(() => {
-              appendMessage(botResponse, "bot");
-          }, 1500);
-      }
+  // Function to display user and bot messages
+  function displayMessage(text, className) {
+      const messageElement = document.createElement("div");
+      messageElement.classList.add("message", className);
+      messageElement.textContent = text;
+      chatArea.appendChild(messageElement);
+      chatArea.scrollTop = chatArea.scrollHeight;
   }
 
+  // Function to display structured JSON response in a readable format
+  function displayFormattedResponse(data) {
+      const responseContainer = document.createElement("div");
+      responseContainer.classList.add("message", "bot-message");
 
-  function getBotResponse(userMessage) {
-      const responses = [
-          { user: "hello", bot: "Hi there! How can I assist you today?" },
-          { user: "what is your name?", bot: "I am ChatBot, your virtual assistant!" },
-          { user: "tell me a joke", bot: "Why don't programmers like nature? It has too many bugs!" },
-          { user: "what is the weather today?", bot: "I can't fetch live weather updates yet, but you can check a weather website!" },
-          { user: "who created you?", bot: "I was created by a developer to assist with various tasks!" },
-          { user: "what is 2 + 2?", bot: "2 + 2 equals 4!" },
-          { user: "how can i contact support?", bot: "You can contact support via email at support@example.com." },
-          { user: "tell me a fun fact", bot: "Did you know? Honey never spoils! Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still perfectly good to eat!" },
-          { user: "goodbye", bot: "Goodbye! Have a great day!" }
-      ];
+      let formattedText = `<strong>🩸 Blood Report Analysis:</strong><br>`;
 
-      const userWords = userMessage.toLowerCase().split(/\s+/);
-
-      const match = responses.find(response => {
-          const botWords = response.user.toLowerCase().split(/\s+/);
-          return botWords.some(word => userWords.includes(word));
-      });
-
-      return match ? match.bot : "I'm sorry, I didn't quite understand that.";
-  }
-
-  function appendMessage(text, sender) {
-      const chatDiv = document.createElement("div");
-      chatDiv.classList.add(sender === "user" ? "chat-right" : "chat-left");
-
-      const messageDiv = document.createElement("div");
-      messageDiv.classList.add(sender === "user" ? "chat-content-left" : "chat-content-right");
-      chatDiv.appendChild(messageDiv);
-      document.querySelector(".chat").appendChild(chatDiv);
-
-      if (sender === "bot") {
-          typeMessage(text, messageDiv);
-      } else {
-          messageDiv.textContent = text;
+      if (data.summary) {
+          formattedText += `<strong>Summary:</strong> ${data.summary}<br>`;
+      }
+      if (data.deficiencies && data.deficiencies.length > 0) {
+          formattedText += `<strong>Deficiencies:</strong> ${data.deficiencies.join(", ")}<br>`;
+      }
+      if (data.recommendations && data.recommendations.length > 0) {
+          formattedText += `<strong>Recommendations:</strong> ${data.recommendations.join(", ")}<br>`;
+      }
+      if (data.important_note) {
+          formattedText += `<strong>Note:</strong> ${data.important_note}<br>`;
+      }
+      if (data.query_response) {
+          formattedText += `<strong>🤖 AI Response:</strong> ${data.query_response}<br>`;
       }
 
-      document.querySelector(".chat").scrollTop = document.querySelector(".chat").scrollHeight;
-  }
-
-  function typeMessage(text, element, index = 0) {
-      if (index < text.length) {
-          element.textContent += text[index];
-          setTimeout(() => typeMessage(text, element, index + 1), 30);
-      }
+      responseContainer.innerHTML = formattedText;
+      chatArea.appendChild(responseContainer);
+      chatArea.scrollTop = chatArea.scrollHeight;
   }
 });

@@ -1,7 +1,6 @@
 import os
-import webbrowser
 import json
-import re
+import webbrowser
 import pdfplumber
 import google.generativeai as genai
 from dotenv import load_dotenv
@@ -9,11 +8,12 @@ from fastapi import FastAPI, File, Form, UploadFile, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-import uvicorn
-# Load fixed prompts
 from app.fixed_prompts import prompt as fixed_prompt1, prompt1 as fixed_prompt2
-# Load environment variables
+import uvicorn
+
 load_dotenv()
+
+# Load API key from .env file
 api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
     raise ValueError("API key is missing. Please check your .env file.")
@@ -24,45 +24,39 @@ app = FastAPI()
 templates = Jinja2Templates(directory="./app/templates")
 app.mount("/static", StaticFiles(directory="./app/static"), name="static")
 
-
+# Home route to display the form
 @app.get("/", response_class=HTMLResponse)
 async def read_form(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post("/", response_class=JSONResponse)
-async def upload_file(file: UploadFile = File(None), messageInput: str = Form(None)):
-    structured_response = {
-        "error": None,
-        "summary": None,
-        "deficiencies": None,
-        "recommendations": None,
-        "important_note": None,
-        "query_response": None
-    }
-    pdf_text = ""
-    
+async def upload_file(request: Request, file: UploadFile = None, messageInput: str = Form(None)):
+    structured_response = {"message_input": messageInput}  # Include message input in the response
+
     try:
+        pdf_text = ""
+
+        # If a file is provided
         if file:
             if not file.filename.endswith(".pdf"):
-                structured_response["error"] = "The uploaded file is not a valid PDF."
-                return JSONResponse(content=structured_response)
-            
+                return JSONResponse(content={"error": "The uploaded file is not a valid PDF."})
+
+            # Extract text from the PDF
             with pdfplumber.open(file.file) as pdf:
                 for page in pdf.pages:
                     pdf_text += page.extract_text() or ""
-            
+
             if not pdf_text.strip():
-                structured_response["error"] = "The PDF is empty or unreadable."
-                return JSONResponse(content=structured_response)
-            
+                return JSONResponse(content={"error": "The PDF is empty or cannot be read."})
+
+            # Check for blood report-related keywords
             blood_report_keywords = [
                 "hemoglobin", "glucose", "white blood cell", "platelet", "red blood cell",
                 "WBC", "RBC", "cholesterol", "count", "CBC"
             ]
-            
             if any(keyword.lower() in pdf_text.lower() for keyword in blood_report_keywords):
                 prompt = f"""{fixed_prompt1}
-                Provide a response in JSON format:
+                Please return the response in JSON format with the following structure:
                 {{
                     "summary": "Brief explanation of key findings",
                     "deficiencies": [ "List of detected deficiencies" ],
@@ -72,37 +66,37 @@ async def upload_file(file: UploadFile = File(None), messageInput: str = Form(No
                 PDF Content:
                 {pdf_text}
                 """
-                
                 response = genai.GenerativeModel(model_name="gemini-1.5-flash").generate_content([prompt])
-                generated_text = response.text.strip()
-                
-                try:
-                    json_match = re.search(r'(\{.*\})', generated_text, re.DOTALL)
-                    if json_match:
-                        structured_response.update(json.loads(json_match.group(1)))
-                    else:
-                        structured_response["error"] = "AI response did not return valid JSON."
-                except json.JSONDecodeError:
-                    structured_response["error"] = "Unable to parse AI response into JSON."
+
+                # Debug: Log the raw AI response
+                raw_response = response.text.strip()
+                print(f"Raw AI Response: {repr(raw_response)}")  # Log raw response with special characters
+
+                # Clean up and remove the markdown formatting
+                cleaned_response = raw_response.replace("```json\n", "").replace("\n```", "").strip()
+
+                if cleaned_response:
+                    try:
+                        structured_response.update(json.loads(cleaned_response))  # Merge AI response into structured_response
+                    except json.JSONDecodeError as e:
+                        return JSONResponse(content={"error": f"Failed to parse JSON: {str(e)}"})
+                else:
+                    return JSONResponse(content={"error": "AI returned an empty response."})
+
             else:
-                structured_response["error"] = "Not a valid blood report PDF."
-        
+                return JSONResponse(content={"error": "Not a valid blood report PDF."})
+
+        # Process messageInput if provided
         if messageInput:
-            query_prompt = (
-                f"{fixed_prompt2}\n"
-                f"Read the following PDF content and address the user's query: '{messageInput}'.\n"
-                f"PDF Content: {pdf_text}\n"
-                f"Provide a clear, concise, and accurate response."
-            )
-            
+            query_prompt = f"{fixed_prompt2} Read this pdf {pdf_text} and solve the query of the user {messageInput} "
             query_response = genai.GenerativeModel(model_name="gemini-1.5-flash").generate_content([query_prompt])
+
             structured_response["query_response"] = query_response.text.strip()
-        
+
         return JSONResponse(content=structured_response)
-    
+
     except Exception as e:
-        structured_response["error"] = str(e)
-        return JSONResponse(content=structured_response)
+        return JSONResponse(content={"error": str(e)})
 
 if __name__ == "__main__":
     webbrowser.open("http://localhost:8000")

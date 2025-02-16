@@ -1,295 +1,263 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", serif;
-}
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", serif;
+  }
+  
+  :root {
+    --text-color: #0d0d0D;
+    --sec-text-clr: rgb(243, 243, 243);
+    --primary-color: white;
+    --secondary-color: #e3e3e3;
+    --primary-foreground-clr: black;
+    --secondary-foreground-clr: ;
+  
+    --primary-font: .7rem;
+  }
+  
+  body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary-color);
+  }
+  
+  .container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .main {
+    position: relative;
+    width: 83%;
+  }
+  
+  .main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 3rem;
+    padding: .5rem;
+  }
+  
+  .model-container {
+    background-color: transparent;
+    padding: .4rem .6rem;
+    border-radius: .5rem;
+  }
+  
+  .model {
+    font-size: .9rem;
+    color: #5D5D5D;
+    font-weight: 600;
+  }
+  
+  .chat-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    max-width: 60%;
+    height: 77%;
+    margin: 0 auto;
+    overflow-y: scroll;
+  
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .chat-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .input-container {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    max-width: 800px;
+  }
+  
+  .messageBox {
+    background-color: var(--primary-color);
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,.1);
+    padding: 8px 12px;
+    box-shadow: 0 9px 9px 0px rgba(0,0,0,.01),0 2px 5px 0px rgba(0,0,0,.06);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .input-wrapper {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  #messageInput {
+    width: 100%;
+    min-height: 24px;
+    max-height: none;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    resize: none;
+    padding: 0;
+    color: var(--text-color);
+    line-height: 1.5;
+    font-size: 16px;
+  }
+  
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  
+  .fileUploadWrapper {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .fileUploadWrapper i {
+    font-size: 20px;
+    color: black;
+  }
+  
+  .fileUploadWrapper input[type="file"] {
+    display: none;
+  }
+  
+  .selectedFileContainer {
+    margin-bottom: 8px;
+    padding: 8px;
+    background-color: #e3e3e3;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4rem;
+    max-width: 100%; /* Ensure it doesn't overflow */
+    overflow: hidden; /* Hide any content that overflows */
+    text-overflow: ellipsis; /* Add ellipsis for overflowed text */
+  }
+  
+  .file-container {
+    position: relative;
+    border-radius: .5rem;
+    display: flex;
+    padding: .4rem;
+    height: 100%;
+    align-items: center;
+    background-color: white;
+  }
+  
+  .rm-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    background: none;
+    outline: none;
+    cursor: pointer;
+  }
+  
+  .selectedFileName {
+    font-size: .6rem;
+    max-width: 80%; /* Limit the width to prevent overflow */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis when text overflows */
+    white-space: nowrap; /* Prevent text from wrapping to a new line */
+  }
+  
+  .rm-x {
+    font-size: 2rem;
+    color: black;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .pdf-icon {
+    font-size: 2rem;
+    color: gray;
+  }
+  
+  .selectedFileContainer.hidden {
+    display: none;
+  }
+  
+  .rounded {
+    width: 2.3rem;
+    height: 2.3rem;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: .4rem;
+  }
+  
+  .rounded:hover {
+    background-color: #e3e3e3;
+  }
+  
+  .sendButton i {
+    font-size: 20px;
+    color: black;
+  }
+  
+  .sendButton {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.3rem;
+    width: 2.3rem;
+    background-color: transparent;
+    border-radius: .4rem;
+    cursor: pointer;
+    transition: all .2s ease-in;
+  }
+  
+  .sendButton:hover {
+    background-color: #e3e3e3;
+  }
+  
+  .default-msg {
+    font-size: 2rem;
+    text-align: center;
+    margin-top: 10rem;
+    color: white;
+  }
+  
+  .default-desc {
+    font-size: .9rem;
+    color: #c1c1c5;
+    text-align: center;
+  }
+  
+  .hidden {
+    display: none;
+  }
 
-:root {
-  --text-color: #0d0d0D;
-  --sec-text-clr: rgb(243, 243, 243);
-  --primary-color: white;
-  --secondary-color: #e3e3e3;
-  --primary-foreground-clr: black;
-  --secondary-foreground-clr: ;
 
-  --primary-font: .7rem;
-}
+  .bot-message {
+    background-color: white;
+    
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-right: auto;
+    border-bottom-left-radius: 0.25rem;
+  }
 
-body {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--primary-color);
-}
-
-.container {
-  display: flex;
-  width: 100%;
-  height: 100%;
-}
-
-.main {
-  position: relative;
-  width: 83%;
-}
-
-.main-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 3rem;
-  padding: .5rem;
-}
-
-.model-container {
-  background-color: transparent;
-  padding: .4rem .6rem;
-  border-radius: .5rem;
-}
-
-.model {
-  font-size: .9rem;
-  color: #5D5D5D;
-  font-weight: 600;
-}
-
-.chat-container {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-direction: column;
-  max-width: 60%;
-  height: 77%;
-  margin: 0 auto;
-  overflow-y: scroll;
-
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.chat-container::-webkit-scrollbar {
-  display: none;
-}
-
-.chat {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: auto;
-}
-
-.chat-left, .chat-right {
-  display: flex;
-  justify-content: flex-start;
-  padding: 1rem;
-  margin: 5px 0;
-}
-
-.chat-left {
-  justify-content: flex-start;
-}
-
-.chat-right {
-  justify-content: flex-end;
-}
-
-.chat-content-left {
-  max-width: 70%;
-  padding: 10px;
-  border-radius: 10px;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  font-size: 14px;
-  max-height: auto;
-}
-
-.chat-content-right {
-  max-width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  font-size: 14px;
-  max-height: auto;
-}
-
-.chat-content-left {
-  background: #73737347;
-  color: #c1c1c5;
-}
-
-.chat-content-right {
-  background: #21212173;
-  color: white;
-}
-
-.input-container {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60%;
-  max-width: 800px;
-}
-
-.messageBox {
-  background-color: var(--primary-color);
-  border-radius: 8px;
-  border: 1px solid rgba(0,0,0,.1);
-  padding: 8px 12px;
-  box-shadow: 0 9px 9px 0px rgba(0,0,0,.01),0 2px 5px 0px rgba(0,0,0,.06);
-  display: flex;
-  flex-direction: column;
-}
-
-.input-wrapper {
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-#messageInput {
-  width: 100%;
-  min-height: 24px;
-  max-height: none;
-  background-color: transparent;
-  outline: none;
-  border: none;
-  resize: none;
-  padding: 0;
-  color: var(--text-color);
-  line-height: 1.5;
-  font-size: 16px;
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 8px;
-}
-
-.fileUploadWrapper {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.fileUploadWrapper i {
-  font-size: 20px;
-  color: black;
-}
-
-.fileUploadWrapper input[type="file"] {
-  display: none;
-}
-
-.selectedFileContainer {
-  margin-bottom: 8px;
-  padding: 8px;
-  background-color: #e3e3e3;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 4rem;
-  max-width: 100%; /* Ensure it doesn't overflow */
-  overflow: hidden; /* Hide any content that overflows */
-  text-overflow: ellipsis; /* Add ellipsis for overflowed text */
-}
-
-.file-container {
-  position: relative;
-  border-radius: .5rem;
-  display: flex;
-  padding: .4rem;
-  height: 100%;
-  align-items: center;
-  background-color: white;
-}
-
-.rm-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  border: none;
-  background: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.selectedFileName {
-  font-size: .6rem;
-  max-width: 80%; /* Limit the width to prevent overflow */
-  overflow: hidden;
-  text-overflow: ellipsis; /* Add ellipsis when text overflows */
-  white-space: nowrap; /* Prevent text from wrapping to a new line */
-}
-
-.rm-x {
-  font-size: 2rem;
-  color: black;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.pdf-icon {
-  font-size: 2rem;
-  color: gray;
-}
-
-.selectedFileContainer.hidden {
-  display: none;
-}
-
-.rounded {
-  width: 2.3rem;
-  height: 2.3rem;
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: .4rem;
-}
-
-.rounded:hover {
-  background-color: #e3e3e3;
-}
-
-.sendButton i {
-  font-size: 20px;
-  color: black;
-}
-
-.sendButton {
-  background: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 2.3rem;
-  width: 2.3rem;
-  background-color: transparent;
-  border-radius: .4rem;
-  cursor: pointer;
-  transition: all .2s ease-in;
-}
-
-.sendButton:hover {
-  background-color: #e3e3e3;
-}
-
-.default-msg {
-  font-size: 2rem;
-  text-align: center;
-  margin-top: 10rem;
-  color: white;
-}
-
-.default-desc {
-  font-size: .9rem;
-  color: #c1c1c5;
-  text-align: center;
-}
-
-.hidden {
-  display: none;
-}
+  .user-message {
+    background-color: #1a73e8;
+    max-width: fit-content;
+    padding: 12px;
+    border-radius: 1.5rem;
+    color: white;
+    margin-left: auto;
+  }
