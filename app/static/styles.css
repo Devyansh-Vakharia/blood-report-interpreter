@@ -56,10 +56,9 @@
   
   .chat-container {
     display: flex;
-    align-items: flex-start;
     justify-content: flex-start;
     flex-direction: column;
-    max-width: 60%;
+    width: 80%;
     height: 77%;
     margin: 0 auto;
     overflow-y: scroll;
@@ -246,18 +245,89 @@
 
 
   .bot-message {
-    background-color: white;
-    
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-right: auto;
-    border-bottom-left-radius: 0.25rem;
+    align-self: flex-start;
+    max-width: 80%;
+    text-align: justify;
+    padding: 12px;
+    margin: 1rem;
+    border-radius: 1.5rem;
   }
 
   .user-message {
     background-color: #1a73e8;
+    color: white;
     max-width: fit-content;
     padding: 12px;
     border-radius: 1.5rem;
-    color: white;
     margin-left: auto;
+    align-self: flex-end;
+    box-shadow: 0px 2px 5px rgba(26, 115, 232, 0.3);
+
+
   }
+  .error-message{
+    align-self: flex-start;
+    max-width: 80%;
+    text-align: justify;
+    padding: 12px;
+    margin: 1rem;
+    border-radius: 1.5rem;
+  }
+
+  /* Loading Dots - Small, Compact, and Aligned */
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f1f1f1; 
+  border-radius: 12px; 
+  padding: 8px 12px;
+  width: fit-content; 
+  max-width: 200px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Small Dots */
+.loading-dots span {
+  width: 6px;
+  height: 6px;
+  margin: 0 3px;
+  background-color: #555;
+  border-radius: 50%;
+  display: inline-block;
+  animation: blink 1.4s infinite both;
+}
+
+/* Dot Animation */
+.loading-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 80%, 100% {
+      opacity: 0;
+  }
+  40% {
+      opacity: 1;
+  }
+}
+
+.chatArea{
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+
+}
+#chatArea::-webkit-scrollbar{
+  display: none;
+
+}

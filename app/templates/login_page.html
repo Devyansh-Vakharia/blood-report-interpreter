@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Sign Up or Login</title>
+    <link rel="stylesheet" href="/static/login_page.css">
+
+</head>
+<body>
+    <div class="container">
+        {% if not show_login %}
+            <div class="form-container">
+                <h2>Create Account</h2>
+                <form action="/api/signup" method="post">
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password (min 8 chars)" required>
+                    <button type="submit">Sign Up</button>
+                    <div class="form-footer">
+                        Already registered? <a href="/login">Log in</a>
+                    </div>
+                </form>
+            </div>
+        {% else %}
+            <div class="form-container">
+                <h2>Welcome Back</h2>
+                <form action="/api/login" method="post">
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit">Log In</button>
+                    <div class="form-footer">
+                        New user? <a href="/">Sign up</a>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
