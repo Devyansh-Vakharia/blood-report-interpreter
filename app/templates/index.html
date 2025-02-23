@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 
-<body>
+<body data-username="{{ username }}">
     <div class="container">
         <div class="sidebar">
             <div class="sidebar-header">
@@ -27,6 +27,7 @@
                     <i class='bx bx-plus plus-ico'></i>
                     <p>New chat</p>
                 </div>
+                <!-- Chat history will be dynamically displayed here -->
             </div>
         </div>
 

@@ -12,7 +12,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    /* background: url("/static/background.jpg") no-repeat center center/cover; */
+    background: linear-gradient(135deg,white, #764ba2);
 }
 
 /* Container */
