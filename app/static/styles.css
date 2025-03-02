@@ -1,293 +1,339 @@
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", serif;
-  }
-  
-  :root {
-    --text-color: #0d0d0D;
-    --sec-text-clr: rgb(243, 243, 243);
-    --primary-color: white;
-    --secondary-color: #e3e3e3;
-    --primary-foreground-clr: black;
-    --secondary-foreground-clr: ;
-  
-    --primary-font: .7rem;
-  }
-  
-  body {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--primary-color);
-  }
-  
-  .container {
-    display: flex;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .main {
-    position: relative;
-    width: 83%;
-  }
-  
-  .main-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 3rem;
-    padding: .5rem;
-  }
-  
-  .model-container {
-    background-color: transparent;
-    padding: .4rem .6rem;
-    border-radius: .5rem;
-  }
-  
-  .model {
-    font-size: .9rem;
-    color: #5D5D5D;
-    font-weight: 600;
-  }
-  
-  .chat-container {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    width: 80%;
-    height: 77%;
-    margin: 0 auto;
-    overflow-y: scroll;
-  
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  
-  .chat-container::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .input-container {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60%;
-    max-width: 800px;
-  }
-  
-  .messageBox {
-    background-color: var(--primary-color);
-    border-radius: 8px;
-    border: 1px solid rgba(0,0,0,.1);
-    padding: 8px 12px;
-    box-shadow: 0 9px 9px 0px rgba(0,0,0,.01),0 2px 5px 0px rgba(0,0,0,.06);
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .input-wrapper {
-    max-height: 200px;
-    overflow-y: auto;
-  }
-  
-  #messageInput {
-    width: 100%;
-    min-height: 24px;
-    max-height: none;
-    background-color: transparent;
-    outline: none;
-    border: none;
-    resize: none;
-    padding: 0;
-    color: var(--text-color);
-    line-height: 1.5;
-    font-size: 16px;
-  }
-  
-  .actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 8px;
-  }
-  
-  .fileUploadWrapper {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-  
-  .fileUploadWrapper i {
-    font-size: 20px;
-    color: black;
-  }
-  
-  .fileUploadWrapper input[type="file"] {
-    display: none;
-  }
-  
-  .selectedFileContainer {
-    margin-bottom: 8px;
-    padding: 8px;
-    background-color: #e3e3e3;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 4rem;
-    max-width: 100%; /* Ensure it doesn't overflow */
-    overflow: hidden; /* Hide any content that overflows */
-    text-overflow: ellipsis; /* Add ellipsis for overflowed text */
-  }
-  
-  .file-container {
-    position: relative;
-    border-radius: .5rem;
-    display: flex;
-    padding: .4rem;
-    height: 100%;
-    align-items: center;
-    background-color: white;
-  }
-  
-  .rm-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    border: none;
-    background: none;
-    outline: none;
-    cursor: pointer;
-  }
-  
-  .selectedFileName {
-    font-size: .6rem;
-    max-width: 80%; /* Limit the width to prevent overflow */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Add ellipsis when text overflows */
-    white-space: nowrap; /* Prevent text from wrapping to a new line */
-  }
-  
-  .rm-x {
-    font-size: 2rem;
-    color: black;
-    font-weight: 500;
-    cursor: pointer;
-  }
-  
-  .pdf-icon {
-    font-size: 2rem;
-    color: gray;
-  }
-  
-  .selectedFileContainer.hidden {
-    display: none;
-  }
-  
-  .rounded {
-    width: 2.3rem;
-    height: 2.3rem;
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: .4rem;
-  }
-  
-  .rounded:hover {
-    background-color: #e3e3e3;
-  }
-  
-  .sendButton i {
-    font-size: 20px;
-    color: black;
-  }
-  
-  .sendButton {
-    background: none;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 2.3rem;
-    width: 2.3rem;
-    background-color: transparent;
-    border-radius: .4rem;
-    cursor: pointer;
-    transition: all .2s ease-in;
-  }
-  
-  .sendButton:hover {
-    background-color: #e3e3e3;
-  }
-  
-  .default-msg {
-    font-size: 2rem;
-    text-align: center;
-    margin-top: 10rem;
-    color: white;
-  }
-  
-  .default-desc {
-    font-size: .9rem;
-    color: #c1c1c5;
-    text-align: center;
-  }
-  
-  .hidden {
-    display: none;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", serif;
+}
 
+:root {
+  --text-color: #0d0d0D;
+  --primary-color: white;
+  --secondary-color: #e3e3e3;
+}
 
-  .bot-message {
-    align-self: flex-start;
-    max-width: 80%;
-    text-align: justify;
-    padding: 12px;
-    margin: 1rem;
-    border-radius: 1.5rem;
-  }
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--primary-color);
+  overflow: hidden;
+}
 
-  /* .user-message {
-    background-color: #1a73e8;
-    color: white;
-    max-width: fit-content;
-    padding: 12px;
-    border-radius: 1.5rem;
-    margin-left: auto;
-    align-self: flex-end;
-    box-shadow: 0px 2px 5px rgba(26, 115, 232, 0.3);
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
 
+/* Responsive modifications */
 
-  } */
-  .error-message{
-    align-self: flex-start;
-    max-width: 80%;
-    text-align: justify;
-    padding: 12px;
-    margin: 1rem;
-    border-radius: 1.5rem;
-  }
+/* Sidebar */
+.sidebar {
+  width: 17%;
+  min-width: 220px;
+  transition: all 0.3s ease;
+  background-color: var(--secondary-color);
+  overflow-y: auto;
+}
 
-  /* Loading Dots - Small, Compact, and Aligned */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 0.5rem;
+}
+
+.logo {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.logo-ico {
+  font-size: 1.5rem;
+  color: #cc0000;
+}
+
+.history {
+  padding: 0.5rem;
+}
+
+.new-chat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.new-chat:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.plus-ico {
+  font-size: 1.2rem;
+}
+
+/* Main area */
+.main {
+  position: relative;
+  width: 83%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 3rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.model-container {
+  background-color: transparent;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.5rem;
+}
+
+.model {
+  font-size: 0.9rem;
+  color: #5D5D5D;
+  font-weight: 600;
+}
+
+.chat-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100% - 3rem - 100px);
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0 1rem;
+}
+
+.chat-container::-webkit-scrollbar {
+  display: none;
+}
+
+.chatArea {
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.chatArea::-webkit-scrollbar {
+  display: none;
+}
+
+/* Input area */
+.input-container {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 800px;
+}
+
+.messageBox {
+  background-color: var(--primary-color);
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,.1);
+  padding: 8px 12px;
+  box-shadow: 0 9px 9px 0px rgba(0,0,0,.01),0 2px 5px 0px rgba(0,0,0,.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.input-wrapper {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+#messageInput {
+  width: 100%;
+  min-height: 24px;
+  max-height: none;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  resize: none;
+  padding: 0;
+  color: var(--text-color);
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+/* File upload styles */
+.fileUploadWrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.fileUploadWrapper i {
+  font-size: 20px;
+  color: black;
+}
+
+.fileUploadWrapper input[type="file"] {
+  display: none;
+}
+
+.selectedFileContainer {
+  margin-bottom: 8px;
+  padding: 8px;
+  background-color: #e3e3e3;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-container {
+  position: relative;
+  border-radius: .5rem;
+  display: flex;
+  padding: .4rem;
+  height: 100%;
+  align-items: center;
+  background-color: white;
+  width: 100%;
+}
+
+.rm-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+  background: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.selectedFileName {
+  font-size: .6rem;
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rm-x {
+  font-size: 2rem;
+  color: black;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pdf-icon {
+  font-size: 2rem;
+  color: gray;
+  margin-right: 0.5rem;
+}
+
+.rounded {
+  width: 2.3rem;
+  height: 2.3rem;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: .4rem;
+}
+
+.rounded:hover {
+  background-color: #e3e3e3;
+}
+
+/* Button styles */
+.sendButton i {
+  font-size: 20px;
+  color: black;
+}
+
+.sendButton {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.3rem;
+  width: 2.3rem;
+  background-color: transparent;
+  border-radius: .4rem;
+  cursor: pointer;
+  transition: all .2s ease-in;
+}
+
+.sendButton:hover {
+  background-color: #e3e3e3;
+}
+
+/* Message styles */
+.bot-message, .error-message {
+  align-self: flex-start;
+  max-width: 80%;
+  text-align: justify;
+  padding: 12px;
+  margin: 1rem;
+  border-radius: 1.5rem;
+  background-color: var(--secondary-color);
+}
+
+.user-combined-message {
+  background-color: #1a73e8;
+  color: white;
+  max-width: fit-content;
+  padding: 12px;
+  border-radius: 1.5rem;
+  margin-left: auto;
+  margin-right: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  align-self: flex-end;
+  box-shadow: 0px 2px 5px rgba(26, 115, 232, 0.3);
+}
+
+/* Loading animation */
 .loading-dots {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f1f1f1; 
-  border-radius: 12px; 
+  background: #f1f1f1;
+  border-radius: 12px;
   padding: 8px 12px;
-  width: fit-content; 
+  width: fit-content;
   max-width: 200px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 1rem;
 }
 
-/* Small Dots */
 .loading-dots span {
   width: 6px;
   height: 6px;
@@ -298,188 +344,726 @@
   animation: blink 1.4s infinite both;
 }
 
-/* Dot Animation */
-.loading-dots span:nth-child(1) {
-  animation-delay: 0s;
-}
-.loading-dots span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.loading-dots span:nth-child(3) {
-  animation-delay: 0.4s;
-}
+.loading-dots span:nth-child(1) { animation-delay: 0s; }
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
 
 @keyframes blink {
-  0%, 80%, 100% {
-      opacity: 0;
-  }
-  40% {
-      opacity: 1;
-  }
+  0%, 80%, 100% { opacity: 0; }
+  40% { opacity: 1; }
 }
 
-.chatArea{
-  padding-bottom: 20px;
+/* Welcome message */
+.welcome-message {
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-
-}
-#chatArea::-webkit-scrollbar{
-  display: none;
-
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: 2rem;
 }
 
-/* .pdf-message{
-  background-color: #1a73e8;
-  color: white;
-  max-width: fit-content;
-  padding: 12px;
-  border-radius: 1.5rem;
-  margin-left: auto;
-  align-self: flex-end;
-  box-shadow: 0px 2px 5px rgba(26, 115, 232, 0.3);
-} */
-
-.user-combined-message{
-  background-color: #1a73e8;
-  color: white;
-  max-width: fit-content;
-  padding: 12px;
-  border-radius: 1.5rem;
-  margin-left: auto;
-  align-self: flex-end;
-  box-shadow: 0px 2px 5px rgba(26, 115, 232, 0.3);
+.welcome-message .upload-icon {
+  font-size: 4rem;
+  color: #3b82f6;
+  margin-bottom: 2rem;
 }
 
-/* User Info Styles */
-.user-info {
+.welcome-message h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.welcome-message p {
+  color: #6b7280;
+  max-width: 32rem;
+  margin-bottom: 2rem;
+}
+
+.welcome-message .features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.welcome-message .feature {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 0.5rem 1rem;
+  gap: 0.5rem;
+  color: #6b7280;
+  font-size: 0.875rem;
 }
 
-.username {
+.welcome-message .feature i {
+  color: #10b981;
+  font-size: 1.25rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Mobile responsiveness */
+/* Mobile Sidebar Styles */
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: auto;
+    min-height: 60px;
+    min-width: 100%;
+    z-index: 10;
+    overflow: hidden;
+  }
+  
+  .sidebar-header {
+    padding: 0.5rem 1rem;
+    justify-content: flex-start;
+    cursor: pointer;
+  }
+  
+  .logo {
+    flex: 1;
+  }
+  
+  .main {
+    width: 100%;
+    height: calc(100% - 60px);
+  }
+  
+  .history {
+    display: none;
+  }
+  
+  .sidebar.expanded {
+    height: auto;
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+  
+  .sidebar.expanded .history {
+    display: block;
+  }
+  
+  .sidebar-toggle {
+    display: block;
+    margin-left: auto;
+    cursor: pointer;
+  }
+  
+  .sidebar-toggle i {
+    font-size: 1.5rem;
+  }
+  
+  .chat-container {
+    height: calc(100% - 60px - 100px);
+  }
+  
+  .input-container {
+    width: 95%;
+    bottom: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .input-container {
+    width: 90%;
+  }
+  
+  .bot-message, 
+  .error-message, 
+  .user-combined-message {
+    max-width: 90%;
+    margin: 0.5rem;
+    padding: 10px;
+  }
+  
+  .welcome-message h2 {
+    font-size: 1.2rem;
+  }
+  
+  .welcome-message p {
+    font-size: 0.9rem;
+  }
+  
+  .welcome-message .features {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1rem;
+  }
+  
+  .sidebar-header {
+    padding: 0.5rem;
+  }
+  
+  .main-header {
+    height: 2.5rem;
+  }
+  
+  .input-container {
+    bottom: 5px;
+  }
+  
+  .messageBox {
+    padding: 6px 8px;
+  }
+  
+  #messageInput {
+    font-size: 14px;
+  }
+}
+
+/* Fix for mobile viewport height */
+:root {
+  --vh: 1vh;
+}
+
+@supports (height: 100dvh) {
+  body, .container {
+    height: 100dvh;
+  }
+}
+
+@supports not (height: 100dvh) {
+  body, .container {
+    height: calc(var(--vh, 1vh) * 100);
+  }
+}
+.pdf-indicator {
+  display: flex;
+  align-items: center;
+  color: #555;
   font-size: 0.9rem;
-  color: var(--text-color);
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  background-color: #f5f5f5;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.pdf-indicator i {
+  color: #e74c3c;
+  margin-right: 8px;
+  font-size: 1.2rem;
+}
+
+.pdf-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 8px 12px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+.pdf-header i {
+  color: #e74c3c;
+  margin-right: 10px;
+  font-size: 1.4rem;
+}
+
+.pdf-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.analysis-header {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  color: #2c3e50;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e6e6e6;
+}
+
+.analysis-section {
+  margin-bottom: 15px;
+  padding-left: 10px;
+}
+
+.section-title {
+  font-weight: 600;
+  color: #3498db;
+  margin-bottom: 6px;
+}
+
+.section-content {
+  color: #555;
+  line-height: 1.5;
+}
+
+.section-list {
+  margin: 0;
+  padding-left: 25px;
+}
+
+.section-list li {
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.note-section {
+  background-color: #fff7e6;
+  padding: 10px 15px;
+  border-left: 4px solid #ffbb33;
+  border-radius: 4px;
+}
+
+.response-section {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e6e6e6;
+}
+
+/* Message styling improvements */
+.message {
+  color: #555555;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.user-combined-message {
+  background-color: #f0f7ff;
+  border-left: 4px solid #3498db;
+}
+
+.bot-message {
+  background-color: #f9f9f9;
+  border-left: 4px solid #2ecc71;
+}
+
+.error-message {
+  background-color: #fff0f0;
+  border-left: 4px solid #e74c3c;
+}
+
+/* Patient Report CSS */
+
+/* Patient Reports Button */
+.patient-report-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  margin: 8px 0;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
   font-weight: 500;
 }
 
-.logout-btn {
-  color: var(--text-color);
-  font-size: 1.2rem;
-  text-decoration: none;
-  padding: 0.3rem;
-  border-radius: 0.3rem;
-  transition: background-color 0.2s ease;
+.patient-report-button:hover {
+  background-color: #e0e0e0;
 }
 
-.logout-btn:hover {
-  background-color: var(--secondary-color);
+.patient-report-button i {
+  font-size: 20px;
+  color: #3b82f6;
 }
 
-/* Loading Overlay */
-.loading-overlay {
+/* Modal Styles */
+.patient-report-modal, .report-details-modal {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.loading-spinner {
-  text-align: center;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid var(--secondary-color);
-  border-top-color: var(--text-color);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 1rem;
-}
-
-@keyframes spin {
-  to {
-      transform: rotate(360deg);
-  }
-}
-
-/* Error Modal */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 20px;
+}
+
+.patient-report-modal.hidden {
+  display: none;
 }
 
 .modal-content {
-  background-color: white;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
+  background-color: #fff;
+  border-radius: 12px;
   width: 90%;
-  max-width: 500px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content.large {
+  max-width: 800px;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 1;
+  border-radius: 12px 12px 0 0;
 }
 
 .modal-header h2 {
   margin: 0;
-  font-size: 1.2rem;
-  color: var(--text-color);
+  font-size: 1.4rem;
+  color: #2563eb;
 }
 
 .close-modal {
   background: none;
   border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-modal:hover {
+  color: #ef4444;
+}
+
+.reports-list {
+  padding: 20px;
+}
+
+.report-card {
+  background-color: #f8fafc;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.report-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.report-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1e3a8a;
+}
+
+.report-date {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.patient-details {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.report-file {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 15px;
+}
+
+.report-file i {
+  color: #ef4444;
+}
+
+.report-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.report-actions button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.view-report {
+  background-color: #2563eb;
+  color: white;
+}
+
+.view-report:hover {
+  background-color: #1d4ed8;
+}
+
+.view-chat {
+  background-color: #10b981;
+  color: white;
+}
+
+.view-chat:hover {
+  background-color: #059669;
+}
+
+.delete-report {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.delete-report:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.loading, .no-reports, .error-message {
+  text-align: center;
+  padding: 20px;
+  color: #6b7280;
+}
+
+.error-message {
+  color: #dc2626;
+}
+
+/* Report Details */
+.report-details {
+  padding: 20px;
+}
+
+.patient-header {
+  margin-bottom: 20px;
+}
+
+/* Patient Report Details Styling */
+.report-details-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.report-details-modal .modal-content {
+  background-color: #fff;
+  border-radius: 12px;
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+}
+
+.report-details-modal .modal-content.large {
+  padding: 0;
+}
+
+.report-details-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #eaeaea;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 5;
+  border-radius: 12px 12px 0 0;
+}
+
+.report-details-modal .modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.report-details-modal .close-modal {
+  background: none;
+  border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  padding: 0.2rem;
+  color: #666;
+  transition: color 0.2s;
 }
 
-.modal-body {
-  margin-bottom: 1.5rem;
+.report-details-modal .close-modal:hover {
+  color: #f44336;
 }
 
-.modal-footer {
-  text-align: right;
+/* Report Content Styling */
+.report-details {
+  padding: 20px 24px;
 }
 
-.modal-close-btn {
-  padding: 0.5rem 1rem;
-  background-color: var(--secondary-color);
+.report-details .patient-header {
+  background-color: #f7f9fc;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  border-left: 4px solid #4285f4;
+}
+
+.report-details .patient-header h2 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 1.8rem;
+}
+
+.report-details .patient-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.report-details .patient-meta span {
+  font-size: 0.95rem;
+  color: #555;
+  background-color: rgba(66, 133, 244, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.report-details .report-section {
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.report-details .report-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.report-details .report-section h3 {
+  color: #1a73e8;
+  font-size: 1.3rem;
+  margin: 0 0 16px 0;
+  position: relative;
+  padding-left: 14px;
+}
+
+.report-details .report-section h3:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 22px;
+  background-color: #1a73e8;
+  border-radius: 3px;
+}
+
+.report-details .report-section p {
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.report-details .report-section ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.report-details .report-section ul li {
+  margin-bottom: 12px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 8px;
+  color: #444;
+}
+
+.report-details .report-section ul li:last-child {
+  margin-bottom: 0;
+}
+
+.report-details .report-actions.center {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.report-details .view-chat-btn {
+  padding: 12px 24px;
+  background-color: #4285f4;
+  color: white;
   border: none;
-  border-radius: 0.3rem;
+  border-radius: 6px;
+  font-size: 1rem;
   cursor: pointer;
-  font-weight: 500;
+  transition: background-color 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.modal-close-btn:hover {
-  background-color: #d0d0d0;
+.report-details .view-chat-btn:hover {
+  background-color: #3367d6;
 }
 
-.hidden {
-  display: none !important;
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .report-details-modal .modal-content {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .report-details .patient-meta {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .report-details .patient-meta span {
+    display: inline-block;
+  }
+  
+  .report-details .patient-header {
+    padding: 16px;
+  }
+  
+  .report-details {
+    padding: 16px;
+  }
 }

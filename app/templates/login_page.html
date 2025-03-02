@@ -4,30 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome - Sign Up or Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/static/login_page.css">
-
 </head>
 <body>
     <div class="container">
         {% if not show_login %}
             <div class="form-container">
                 <h2>Create Account</h2>
-                <form action="/api/signup" method="post">
-                    <input type="text" name="username" placeholder="Username" required>
-                    <input type="email" name="email" placeholder="Email" required>
-                    <input type="password" name="password" placeholder="Password (min 8 chars)" required>
+                <form id="signupForm" action="/api/signup" method="post">
+                    <div id="signupErrorBanner" class="error-banner" style="display: none;"></div>
+                    
+                    <div class="input-group" id="usernameGroup">
+                        <input type="text" name="username" id="username" placeholder="Username" required>
+                        <div class="error-message" id="usernameError"></div>
+                    </div>
+                    
+                    <div class="input-group" id="emailGroup">
+                        <input type="email" name="email" id="email" placeholder="Email" required>
+                        <div class="error-message" id="emailError"></div>
+                    </div>
+                    
+                    <div class="input-group" id="passwordGroup">
+                        <input type="password" name="password" id="password" placeholder="Password (min 8 chars)" required>
+                        <span class="password-toggle" id="passwordToggleSignup">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                        <div class="error-message" id="passwordError"></div>
+                    </div>
+                    
                     <button type="submit">Sign Up</button>
                     <div class="form-footer">
-                        Already registered? <a href="/login">Log in</a>
+                        Already created account? <a href="/login">Log in</a>
                     </div>
                 </form>
             </div>
         {% else %}
             <div class="form-container">
                 <h2>Welcome Back</h2>
-                <form action="/api/login" method="post">
-                    <input type="text" name="username" placeholder="Username" required>
-                    <input type="password" name="password" placeholder="Password" required>
+                <form id="loginForm" action="/api/login" method="post">
+                    <div id="loginErrorBanner" class="error-banner" style="display: none;"></div>
+                    
+                    <div class="input-group" id="loginUsernameGroup">
+                        <input type="text" name="username" id="loginUsername" placeholder="Username" required>
+                        <div class="error-message" id="loginUsernameError"></div>
+                    </div>
+                    
+                    <div class="input-group" id="loginPasswordGroup">
+                        <input type="password" name="password" id="loginPassword" placeholder="Password" required>
+                        <span class="password-toggle" id="passwordToggleLogin">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                        <div class="error-message" id="loginPasswordError"></div>
+                    </div>
+                    
                     <button type="submit">Log In</button>
                     <div class="form-footer">
                         New user? <a href="/">Sign up</a>
@@ -36,5 +66,106 @@
             </div>
         {% endif %}
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password Toggle Functionality
+            const setupPasswordToggle = (toggleId, inputId) => {
+                const toggle = document.getElementById(toggleId);
+                const input = document.getElementById(inputId);
+                
+                if (toggle && input) {
+                    toggle.addEventListener('click', () => {
+                        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                        input.setAttribute('type', type);
+                        toggle.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                    });
+                }
+            };
+
+            // Setup password toggles
+            setupPasswordToggle('passwordToggleSignup', 'password');
+            setupPasswordToggle('passwordToggleLogin', 'loginPassword');
+
+            // Form submission handling
+            const handleFormSubmit = (formId, errorBannerId) => {
+                const form = document.getElementById(formId);
+                const errorBanner = document.getElementById(errorBannerId);
+                
+                if (form) {
+                    form.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        
+                        // Reset previous error states
+                        errorBanner.style.display = 'none';
+                        document.querySelectorAll('.input-group').forEach(group => {
+                            group.classList.remove('error');
+                        });
+                        document.querySelectorAll('.error-message').forEach(msg => {
+                            msg.textContent = '';
+                        });
+                        
+                        // Form validation
+                        let isValid = true;
+                        
+                        // For signup form
+                        if (formId === 'signupForm') {
+                            const password = document.getElementById('password');
+                            const passwordError = document.getElementById('passwordError');
+                            const passwordGroup = document.getElementById('passwordGroup');
+                            
+                            if (password.value.length < 8) {
+                                passwordError.textContent = 'Password must be at least 8 characters long';
+                                passwordGroup.classList.add('error');
+                                isValid = false;
+                            }
+                        }
+                        
+                        if (isValid) {
+                            const formData = new FormData(form);
+                            
+                            try {
+                                const response = await fetch(form.action, {
+                                    method: 'POST',
+                                    body: formData
+                                });
+                                
+                                const result = await response.json();
+                                
+                                if (response.redirected) {
+                                    window.location.href = response.url;
+                                } else if (result.error) {
+                                    // Display error message
+                                    errorBanner.textContent = result.error;
+                                    errorBanner.style.display = 'block';
+                                    
+                                    // Highlight specific fields if mentioned in error
+                                    if (result.error.includes('Username')) {
+                                        const usernameGroup = document.getElementById(formId === 'signupForm' ? 'usernameGroup' : 'loginUsernameGroup');
+                                        usernameGroup.classList.add('error');
+                                    }
+                                    if (result.error.includes('Email')) {
+                                        const emailGroup = document.getElementById('emailGroup');
+                                        if (emailGroup) emailGroup.classList.add('error');
+                                    }
+                                    if (result.error.includes('Password')) {
+                                        const passwordGroup = document.getElementById(formId === 'signupForm' ? 'passwordGroup' : 'loginPasswordGroup');
+                                        passwordGroup.classList.add('error');
+                                    }
+                                }
+                            } catch (error) {
+                                errorBanner.textContent = 'An error occurred. Please try again.';
+                                errorBanner.style.display = 'block';
+                            }
+                        }
+                    });
+                }
+            };
+            
+            // Setup form submission handlers
+            handleFormSubmit('signupForm', 'signupErrorBanner');
+            handleFormSubmit('loginForm', 'loginErrorBanner');
+        });
+    </script>
 </body>
 </html>

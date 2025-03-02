@@ -1,5 +1,4 @@
-  /* General Styles */
-  * {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -12,14 +11,14 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg,white, #764ba2);
+    background: linear-gradient(135deg, white, #764ba2);
 }
 
 /* Container */
 .container {
     display: flex;
     gap: 30px;
-    max-width: 800px;
+    max-width: 500px;
     width: 90%;
     padding: 20px;
     position: relative;
@@ -65,7 +64,12 @@ form {
     gap: 16px;
 }
 
-input {
+.input-group {
+    position: relative;
+    width: 100%;
+}
+
+.input-group input {
     width: 100%;
     padding: 14px 16px;
     border: 2px solid #e2e8f0;
@@ -74,14 +78,50 @@ input {
     background: rgba(255, 255, 255, 0.9);
 }
 
-input:focus {
+.input-group input:focus {
     outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
-input::placeholder {
+.input-group input::placeholder {
     color: #a0aec0;
+}
+
+.input-group.error input {
+    border-color: #e53e3e;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #a0aec0;
+}
+
+.password-toggle:hover {
+    color: #667eea;
+}
+
+/* Error Message */
+.error-message {
+    color: #e53e3e;
+    font-size: 14px;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.error-banner {
+    background-color: rgba(229, 62, 62, 0.1);
+    border-left: 4px solid #e53e3e;
+    color: #e53e3e;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 /* Buttons */

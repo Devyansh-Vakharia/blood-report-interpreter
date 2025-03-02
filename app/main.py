@@ -6,7 +6,7 @@ import secrets
 import google.generativeai as genai
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, Form, UploadFile, Request, Depends
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse,RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
@@ -26,9 +26,10 @@ load_dotenv()
 
 # Database connection
 client = MongoClient(os.getenv("MONGODB_URI"))
-db = client["chatbot_db"]  # Database name
-chat_collection = db["chat_history"]  # Collection for chat areas
+db = client["chatbot_db"] 
+chat_collection = db["chat_history"] 
 user_collection = db["users"]
+patient_report_collection = db["patient_reports"]
 
 # Configure API Key
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -47,6 +48,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+
 # Models for data validation
 class Message(BaseModel):
     user_message: str
@@ -58,6 +61,7 @@ class ChatArea(BaseModel):
     username: str
     pdf_name: Optional[str]
     bot_response_pdf: Optional[dict]
+    report_id: Optional[str]
     messages: List[Message]
     created_at: str
     last_updated: str
@@ -67,13 +71,48 @@ class User(BaseModel):
     email: EmailStr
     password: str
 
+class PatientReport(BaseModel):
+    report_id: str
+    username: str 
+    patient_name: str
+    patient_age: str
+    patient_gender: str
+    report_name: str  # PDF name
+    deficiencies: List[str]
+    recommendations: List[str]
+    summary: str
+    created_at: str
+    chat_id: Optional[str]
+
 def get_timestamp():
     return datetime.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S.%f')
 
-def generate_user_id():
+def generate_id():
     return str(uuid.uuid4())
 
-def save_chat_history(session_data, pdf_name, bot_response_pdf, user_input, bot_response, chat_id=None):
+def save_patient_report(username, pdf_name, report_data, chat_id=None):
+    """Save patient report data to MongoDB"""
+    report_id = generate_id()
+    timestamp = get_timestamp()
+    
+    report = {
+        "report_id": report_id,
+        "username": username,
+        "patient_name": report_data.get("name", "Not specified"),
+        "patient_age": report_data.get("age", "Not specified"),
+        "patient_gender": report_data.get("gender", "Not specified"),
+        "report_name": pdf_name,
+        "deficiencies": report_data.get("deficiencies", []),
+        "recommendations": report_data.get("recommendations", []),
+        "summary": report_data.get("summary", ""),
+        "created_at": timestamp,
+        "chat_id": chat_id
+    }
+    
+    patient_report_collection.insert_one(report)
+    return report_id
+
+def save_chat_history(session_data, pdf_name, bot_response_pdf, user_input, bot_response, report_id=None, chat_id=None):
     timestamp = get_timestamp()
     
     new_message = {
@@ -86,9 +125,10 @@ def save_chat_history(session_data, pdf_name, bot_response_pdf, user_input, bot_
     if not chat_id:
         # Create new chat area
         chat_data = {
-            "chat_id": generate_user_id(),
+            "chat_id": generate_id(),
             "username": session_data["username"],
-            "pdf_name": pdf_name,  # Keep PDF name in data but don't display it
+            "pdf_name": pdf_name,
+            "report_id": report_id,  # Link to patient report
             "messages": [new_message],
             "created_at": timestamp,
             "last_updated": timestamp
@@ -98,6 +138,14 @@ def save_chat_history(session_data, pdf_name, bot_response_pdf, user_input, bot_
         chat_data["ai_title"] = generate_chat_title([new_message], pdf_name)
         
         chat_collection.insert_one(chat_data)
+        
+        # Update report with chat_id if we have a report
+        if report_id:
+            patient_report_collection.update_one(
+                {"report_id": report_id},
+                {"$set": {"chat_id": chat_data["chat_id"]}}
+            )
+        
         return chat_data["chat_id"]
     else:
         # Update existing chat area
@@ -107,7 +155,8 @@ def save_chat_history(session_data, pdf_name, bot_response_pdf, user_input, bot_
                 "$push": {"messages": new_message},
                 "$set": {
                     "last_updated": timestamp,
-                    "pdf_name": pdf_name
+                    "pdf_name": pdf_name,
+                    "report_id": report_id  # Update report reference if needed
                 }
             }
         )
@@ -122,14 +171,45 @@ def save_chat_history(session_data, pdf_name, bot_response_pdf, user_input, bot_
             )
         
         return chat_id
+
 # Home route - Login/Signup page
 @app.get("/", response_class=HTMLResponse)
 async def show_signup(request: Request):
     return templates.TemplateResponse("login_page.html", {"request": request, "show_login": False})
 
+# After login index.html page will appear
 @app.get("/login", response_class=HTMLResponse)
 async def show_login(request: Request):
+    if request.session and request.session.get("user"):
+        return RedirectResponse(url=f"/{request.session['user']['username']}/")
+
     return templates.TemplateResponse("login_page.html", {"request": request, "show_login": True})
+
+# Username will be displayed at url after login or signup
+@app.get("/{username}/", response_class=HTMLResponse)
+async def user_dashboard(request: Request, username: str):
+    session_data = request.session.get("user", {})
+    if not session_data or session_data.get("username") != username:
+        return RedirectResponse(url="/login")
+    return templates.TemplateResponse("index.html", {"request": request, "username": username})
+
+# When user clicks chat the chatid along with that username will be displayed in url
+@app.get("/{username}/{chat_id}", response_class=HTMLResponse)
+async def specific_chat(request: Request, username: str, chat_id: str):
+    session_data = request.session.get("user", {})
+    if not session_data or session_data.get("username") != username:
+        return RedirectResponse(url="/login")
+    
+    # Verify chat belongs to user
+    chat = chat_collection.find_one({
+        "chat_id": chat_id,
+        "username": username
+    })
+    
+    if not chat:
+        return RedirectResponse(url=f"/{username}/")
+        
+    return templates.TemplateResponse("index.html", {"request": request, "username": username})
 
 # Signup Route
 @app.post("/api/signup", response_class=HTMLResponse)
@@ -152,22 +232,23 @@ async def signup(request: Request, username: str = Form(...), email: EmailStr = 
     })
     
     request.session["user"] = {"username": username}
-    return templates.TemplateResponse("index.html", {"request": request, "username": username})
+    return RedirectResponse(url=f"/{username}/")
 
 # Login Route
-@app.post("/api/login/", response_class=HTMLResponse)
+@app.post("/api/login", response_class=HTMLResponse)
 async def login(request: Request, username: str = Form(...), password: str = Form(...)):
-    user = user_collection.find_one({"username": username})
-    if not user or not bcrypt.checkpw(password.encode("utf-8"), user["password"]):
-        return JSONResponse(content={"error": "Invalid username or password."})
-    
-    user_collection.update_one(
-        {"username": username},
-        {"$set": {"last_login_timestamp": get_timestamp()}}
-    )
-    
-    request.session["user"] = {"username": username}
-    return templates.TemplateResponse("index.html", {"request": request, "username": username})
+        user = user_collection.find_one({"username": username})
+        if not user or not bcrypt.checkpw(password.encode("utf-8"), user["password"]):
+            return JSONResponse(content={"error": "Invalid username or password."})
+
+        user_collection.update_one(
+            {"username": username},
+            {"$set": {"last_login_timestamp": get_timestamp()}}
+        )
+
+        request.session["user"] = {"username": username}
+        return RedirectResponse(url=f"/{username}/")
+
 
 # File Upload and AI Processing
 # Update the upload_file endpoint to handle PDF-only uploads
@@ -249,8 +330,13 @@ async def upload_file(
             
             prompt = f"""{fixed_prompt1}
                 Please return the response in JSON format with the following structure:
+
                 {{
+                
                     "summary": "Brief explanation of key findings",
+                    "name": "Patient's Name",
+                    "age": "Patient's Age",
+                    "gender": "Patient's Gender",
                     "deficiencies": [ "List of detected deficiencies" ],
                     "recommendations": [ "Suggested medicines, nutrients, or meals" ],
                     "important_note": "Reminder that AI is not a doctor"
@@ -267,10 +353,20 @@ async def upload_file(
                     structured_response.update(json.loads(cleaned_response))
                     bot_response_pdf = {
                         "summary": structured_response.get("summary", ""),
+                        "name": structured_response.get("name", "Not specified"),
+                        "age": structured_response.get("age", "Not specified"),
+                        "gender": structured_response.get("gender", "Not specified"),
                         "deficiencies": structured_response.get("deficiencies", []),
                         "recommendations": structured_response.get("recommendations", []),
                         "important_note": structured_response.get("important_note", "")
-                    }
+                        }
+                    report_id = save_patient_report(
+                        session_data["username"],
+                        pdf_name,
+                        bot_response_pdf,
+                        chatId
+                    )
+                    structured_response["report_id"] = report_id
                     
                     # Save chat history for PDF-only upload
                     if not messageInput:
@@ -307,6 +403,7 @@ async def upload_file(
                 bot_response_pdf, 
                 messageInput, 
                 structured_response.get("query_response", ""),
+                structured_response.get("report_id"),
                 chatId
             )
             structured_response["chat_id"] = chat_id
@@ -314,6 +411,62 @@ async def upload_file(
         return JSONResponse(content=structured_response)
     except Exception as e:
         return JSONResponse(content={"error": str(e)})
+    
+@app.get("/api/patient_reports/{username}", response_class=JSONResponse)
+async def get_patient_reports(username: str):
+    try:
+        reports = list(patient_report_collection.find(
+            {"username": username},
+            {"_id": 0}
+        ).sort("created_at", -1))
+        
+        if not reports:
+            return JSONResponse(content=[])
+        
+        return JSONResponse(content=reports)
+    except Exception as e:
+        return JSONResponse(content={"error": f"Failed to load patient reports: {str(e)}"})
+
+@app.get("/api/patient_report/{report_id}", response_class=JSONResponse)
+async def get_patient_report(report_id: str):
+    report = patient_report_collection.find_one({"report_id": report_id}, {"_id": 0})
+    
+    if not report:
+        return JSONResponse(content={"error": "Patient report not found"})
+    
+    return JSONResponse(content=report)
+
+# Delete patient report
+@app.delete("/api/patient_report/{report_id}", response_class=JSONResponse)
+async def delete_patient_report(report_id: str, request: Request):
+    session_data = request.session.get("user", {})
+    if not session_data:
+        return JSONResponse(content={"error": "User not logged in."})
+    
+    # Get associated chat info first
+    report = patient_report_collection.find_one({
+        "report_id": report_id,
+        "username": session_data["username"]
+    })
+    
+    if not report:
+        return JSONResponse(content={"error": "Report not found or unauthorized"})
+    
+    # Delete the report
+    patient_report_collection.delete_one({
+        "report_id": report_id,
+        "username": session_data["username"]
+    })
+    
+    # Update any chat that referenced this report
+    if report.get("chat_id"):
+        chat_collection.update_one(
+            {"chat_id": report["chat_id"]},
+            {"$set": {"report_id": None}}
+        )
+    
+    return JSONResponse(content={"message": "Patient report deleted successfully"})
+    
 # Get User Chat Areas
 @app.get("/api/chat_areas/{username}", response_class=JSONResponse)
 async def get_chat_areas(username: str):
