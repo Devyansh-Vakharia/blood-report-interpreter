@@ -25,7 +25,7 @@ from typing import List, Optional
 load_dotenv()
 
 # Database connection
-client = MongoClient(os.getenv("MONGODB_URI"))
+client = MongoClient(os.getenv("MONGODB_URI"), tls=True, tlsAllowInvalidCertificates=True)
 db = client["chatbot_db"] 
 chat_collection = db["chat_history"] 
 user_collection = db["users"]
