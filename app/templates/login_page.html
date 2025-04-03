@@ -70,7 +70,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Password Toggle Functionality
+            // password toggle functionality
             const setupPasswordToggle = (toggleId, inputId) => {
                 const toggle = document.getElementById(toggleId);
                 const input = document.getElementById(inputId);
@@ -84,11 +84,11 @@
                 }
             };
 
-            // Setup password toggles
+            // setup password toggles
             setupPasswordToggle('passwordToggleSignup', 'password');
             setupPasswordToggle('passwordToggleLogin', 'loginPassword');
 
-            // Form submission handling
+            // form submission handling
             const handleFormSubmit = (formId, errorBannerId) => {
                 const form = document.getElementById(formId);
                 const errorBanner = document.getElementById(errorBannerId);
@@ -106,10 +106,10 @@
                             msg.textContent = '';
                         });
                         
-                        // Form validation
+                        // form validation
                         let isValid = true;
                         
-                        // For signup form
+                        // for signup form
                         if (formId === 'signupForm') {
                             const password = document.getElementById('password');
                             const passwordError = document.getElementById('passwordError');
@@ -136,11 +136,11 @@
                                 if (response.redirected) {
                                     window.location.href = response.url;
                                 } else if (result.error) {
-                                    // Display error message
+                                    // display error message
                                     errorBanner.textContent = result.error;
                                     errorBanner.style.display = 'block';
                                     
-                                    // Highlight specific fields if mentioned in error
+                                    // highlight specific fields if mentioned in error
                                     if (result.error.includes('Username')) {
                                         const usernameGroup = document.getElementById(formId === 'signupForm' ? 'usernameGroup' : 'loginUsernameGroup');
                                         usernameGroup.classList.add('error');

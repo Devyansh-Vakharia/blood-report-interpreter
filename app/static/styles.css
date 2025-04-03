@@ -9,7 +9,17 @@
 :root {
   --text-color: #0d0d0D;
   --primary-color: white;
-  --secondary-color: #e3e3e3;
+  --secondary-color: #f8f9fa;
+  --accent-color: #e63946;
+  --accent-light: #f8d7da;
+  --border-color: #e3e3e3;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --transition: all 0.3s ease;
 }
 
 body {
@@ -18,6 +28,7 @@ body {
   flex-direction: column;
   background-color: var(--primary-color);
   overflow: hidden;
+  
 }
 
 .container {
@@ -26,55 +37,8 @@ body {
   height: 100%;
 }
 
-/* Responsive modifications */
 
-/* Sidebar */
-.sidebar {
-  width: 17%;
-  min-width: 220px;
-  transition: all 0.3s ease;
-  background-color: var(--secondary-color);
-  overflow-y: auto;
-}
 
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  gap: 0.5rem;
-}
-
-.logo {
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.logo-ico {
-  font-size: 1.5rem;
-  color: #cc0000;
-}
-
-.history {
-  padding: 0.5rem;
-}
-
-.new-chat {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.new-chat:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.plus-ico {
-  font-size: 1.2rem;
-}
 
 /* Main area */
 .main {
@@ -84,15 +48,18 @@ body {
   flex-direction: column;
   flex: 1;
   overflow: hidden;
+  background-color: #fbfbfd;
 }
 
 .main-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 3rem;
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  height: 3.5rem;
+  padding: 0.5rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  background-color: white;
+  box-shadow: var(--shadow-sm);
 }
 
 .model-container {
@@ -116,7 +83,7 @@ body {
   overflow-y: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding: 0 1rem;
+  padding-bottom: 2rem;
 }
 
 .chat-container::-webkit-scrollbar {
@@ -296,28 +263,40 @@ body {
 }
 
 /* Message styles */
+.message {
+  color: #555555;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
 .bot-message, .error-message {
   align-self: flex-start;
   max-width: 80%;
   text-align: justify;
-  padding: 12px;
+  padding: 16px;
   margin: 1rem;
-  border-radius: 1.5rem;
-  background-color: var(--secondary-color);
+  border-radius: var(--radius-lg);
+  background-color: white;
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid #2ecc71;
 }
 
 .user-combined-message {
-  background-color: #1a73e8;
-  color: white;
+  background-color: white;
+  color: var(--text-color);
   max-width: fit-content;
-  padding: 12px;
-  border-radius: 1.5rem;
+  padding: 16px;
+  border-radius: var(--radius-lg);
   margin-left: auto;
   margin-right: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
   align-self: flex-end;
-  box-shadow: 0px 2px 5px rgba(26, 115, 232, 0.3);
+  box-shadow: var(--shadow-sm);
+  border-right: 4px solid var(--accent-color);
 }
 
 /* Loading animation */
@@ -371,36 +350,47 @@ body {
 }
 
 .welcome-message h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
 }
 
 .welcome-message p {
-  color: #6b7280;
+  color: #5a6a7c;
   max-width: 32rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  font-size: 1.05rem;
 }
 
 .welcome-message .features {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .welcome-message .feature {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: #6b7280;
-  font-size: 0.875rem;
+  gap: 0.8rem;
+  color: #495057;
+  font-size: 1rem;
+  padding: 1rem;
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+.welcome-message .feature:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
 }
 
 .welcome-message .feature i {
-  color: #10b981;
-  font-size: 1.25rem;
+  color: var(--accent-color);
+  font-size: 1.5rem;
 }
 
 .hidden {
@@ -629,408 +619,6 @@ body {
 }
 
 /* Message styling improvements */
-.message {
-  color: #555555;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  transition: all 0.3s ease;
-}
-
-.user-combined-message {
-  background-color: #f0f7ff;
-  border-left: 4px solid #3498db;
-}
-
-.bot-message {
-  background-color: #f9f9f9;
-  border-left: 4px solid #2ecc71;
-}
-
-.error-message {
-  background-color: #fff0f0;
-  border-left: 4px solid #e74c3c;
-}
-
-/* Patient Report CSS */
-
-/* Patient Reports Button */
-.patient-report-button {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 15px;
-  margin: 8px 0;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 500;
-}
-
-.patient-report-button:hover {
-  background-color: #e0e0e0;
-}
-
-.patient-report-button i {
-  font-size: 20px;
-  color: #3b82f6;
-}
-
-/* Modal Styles */
-.patient-report-modal, .report-details-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 20px;
-}
-
-.patient-report-modal.hidden {
-  display: none;
-}
-
-.modal-content {
-  background-color: #fff;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 700px;
-  max-height: 80vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-.modal-content.large {
-  max-width: 800px;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  border-bottom: 1px solid #e5e7eb;
-  position: sticky;
-  top: 0;
-  background-color: #fff;
-  z-index: 1;
-  border-radius: 12px 12px 0 0;
-}
-
-.modal-header h2 {
-  margin: 0;
-  font-size: 1.4rem;
-  color: #2563eb;
-}
-
-.close-modal {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.5rem;
-  color: #6b7280;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.close-modal:hover {
-  color: #ef4444;
-}
-
-.reports-list {
-  padding: 20px;
-}
-
-.report-card {
-  background-color: #f8fafc;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 15px;
-  border: 1px solid #e5e7eb;
-  transition: all 0.2s ease;
-}
-
-.report-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transform: translateY(-2px);
-}
-
-.report-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.report-header h3 {
-  margin: 0;
-  font-size: 1.1rem;
-  color: #1e3a8a;
-}
-
-.report-date {
-  font-size: 0.85rem;
-  color: #6b7280;
-}
-
-.patient-details {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 10px;
-  font-size: 0.9rem;
-}
-
-.report-file {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.85rem;
-  color: #6b7280;
-  margin-bottom: 15px;
-}
-
-.report-file i {
-  color: #ef4444;
-}
-
-.report-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.report-actions button {
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: none;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.view-report {
-  background-color: #2563eb;
-  color: white;
-}
-
-.view-report:hover {
-  background-color: #1d4ed8;
-}
-
-.view-chat {
-  background-color: #10b981;
-  color: white;
-}
-
-.view-chat:hover {
-  background-color: #059669;
-}
-
-.delete-report {
-  background-color: #f3f4f6;
-  color: #4b5563;
-}
-
-.delete-report:hover {
-  background-color: #fee2e2;
-  color: #dc2626;
-}
-
-.loading, .no-reports, .error-message {
-  text-align: center;
-  padding: 20px;
-  color: #6b7280;
-}
-
-.error-message {
-  color: #dc2626;
-}
-
-/* Report Details */
-.report-details {
-  padding: 20px;
-}
-
-.patient-header {
-  margin-bottom: 20px;
-}
-
-/* Patient Report Details Styling */
-.report-details-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn 0.3s ease;
-}
-
-.report-details-modal .modal-content {
-  background-color: #fff;
-  border-radius: 12px;
-  max-width: 800px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  animation: slideUp 0.3s ease;
-}
-
-.report-details-modal .modal-content.large {
-  padding: 0;
-}
-
-.report-details-modal .modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 24px;
-  border-bottom: 1px solid #eaeaea;
-  position: sticky;
-  top: 0;
-  background-color: #fff;
-  z-index: 5;
-  border-radius: 12px 12px 0 0;
-}
-
-.report-details-modal .modal-header h2 {
-  margin: 0;
-  font-size: 1.5rem;
-  color: #333;
-}
-
-.report-details-modal .close-modal {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #666;
-  transition: color 0.2s;
-}
-
-.report-details-modal .close-modal:hover {
-  color: #f44336;
-}
-
-/* Report Content Styling */
-.report-details {
-  padding: 20px 24px;
-}
-
-.report-details .patient-header {
-  background-color: #f7f9fc;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 24px;
-  border-left: 4px solid #4285f4;
-}
-
-.report-details .patient-header h2 {
-  margin: 0 0 12px 0;
-  color: #333;
-  font-size: 1.8rem;
-}
-
-.report-details .patient-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.report-details .patient-meta span {
-  font-size: 0.95rem;
-  color: #555;
-  background-color: rgba(66, 133, 244, 0.1);
-  padding: 6px 12px;
-  border-radius: 20px;
-}
-
-.report-details .report-section {
-  margin-bottom: 28px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid #eaeaea;
-}
-
-.report-details .report-section:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-}
-
-.report-details .report-section h3 {
-  color: #1a73e8;
-  font-size: 1.3rem;
-  margin: 0 0 16px 0;
-  position: relative;
-  padding-left: 14px;
-}
-
-.report-details .report-section h3:before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 6px;
-  height: 22px;
-  background-color: #1a73e8;
-  border-radius: 3px;
-}
-
-.report-details .report-section p {
-  color: #555;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.report-details .report-section ul {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.report-details .report-section ul li {
-  margin-bottom: 12px;
-  line-height: 1.5;
-  position: relative;
-  padding-left: 8px;
-  color: #444;
-}
-
-.report-details .report-section ul li:last-child {
-  margin-bottom: 0;
-}
-
-.report-details .report-actions.center {
-  text-align: center;
-  margin-top: 30px;
-}
-
-.report-details .view-chat-btn {
-  padding: 12px 24px;
-  background-color: #4285f4;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.report-details .view-chat-btn:hover {
-  background-color: #3367d6;
-}
 
 /* Animation */
 @keyframes fadeIn {
@@ -1042,7 +630,6 @@ body {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
-
 /* Responsive */
 @media (max-width: 768px) {
   .report-details-modal .modal-content {
@@ -1067,3 +654,4 @@ body {
     padding: 16px;
   }
 }
+

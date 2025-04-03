@@ -12,8 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
     const patientReportButton = document.createElement('div');
-    patientReportButton.className = 'patient-report-button';
-    patientReportButton.innerHTML = '<i class="bx bxs-report"></i> Patient Reports';
+    patientReportButton.className = 'patient-report-button ';
+    patientReportButton.innerHTML = '<i class="bx bxs-report" ></i> Patient Reports';
     sidebar.querySelector('.sidebar-header').after(patientReportButton);
     
     let currentChatId = null;
@@ -136,8 +136,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     textarea.addEventListener("input", function() {
-        this.style.height = 'auto';
-        this.style.height = (this.scrollHeight) + 'px';
+        this.style.height = 'auto'; // Reset height
+        let maxHeight = parseInt(getComputedStyle(this).lineHeight) * 4; 
+        this.style.height = Math.min(this.scrollHeight, maxHeight) + 'px'; 
     });
 
     // FIX: Show welcome message only if there's no currentChatId
@@ -583,16 +584,23 @@ document.addEventListener("DOMContentLoaded", () => {
             displayMessage("❌ Failed to load chat!", "error-message");
         }
     } 
+    
 
     async function deleteChatArea(chatId) {
+        // Prevent multiple simultaneous delete attempts
+        if (this.deleting) return;
+    
         if (!confirm("Are you sure you want to delete this chat?")) return;
-
+    
+        // Flag to prevent multiple concurrent deletions
+        this.deleting = true;
+    
         try {
             const response = await fetch(`/api/chat_area/${chatId}`, {
                 method: 'DELETE'
             });
             const result = await response.json();
-
+    
             if (result.error) {
                 displayMessage("❌ Error: " + result.error, "error-message");
             } else {
@@ -601,11 +609,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     currentChatId = null;
                     showWelcomeMessage();
                 }
+                
+                // Add a small delay to prevent rapid successive calls
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
                 await loadChatAreas();
             }
         } catch (error) {
             console.error("Failed to delete chat area:", error);
             displayMessage("❌ Failed to delete chat!", "error-message");
+        } finally {
+            // Reset the deletion flag
+            this.deleting = false;
         }
     }
 
@@ -626,6 +641,12 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".chat-area-item").forEach(item => {
             item.classList.remove("selected");
         });
+        if (window.innerWidth <= 1024) {
+            sidebar.classList.remove('expanded');
+            // Reset toggle button icon
+            const icon = toggleButton.querySelector('i');
+            icon.className = 'bx bx-menu';
+        }
     });
 
     // Add browser history handling

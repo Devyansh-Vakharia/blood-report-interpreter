@@ -77,7 +77,7 @@ class PatientReport(BaseModel):
     patient_name: str
     patient_age: str
     patient_gender: str
-    report_name: str  # PDF name
+    report_name: str 
     deficiencies: List[str]
     recommendations: List[str]
     summary: str
@@ -123,12 +123,12 @@ def save_chat_history(session_data, pdf_name, bot_response_pdf, user_input, bot_
     }
     
     if not chat_id:
-        # Create new chat area
+        # create new chat area
         chat_data = {
             "chat_id": generate_id(),
             "username": session_data["username"],
             "pdf_name": pdf_name,
-            "report_id": report_id,  # Link to patient report
+            "report_id": report_id,  # link to patient report
             "messages": [new_message],
             "created_at": timestamp,
             "last_updated": timestamp
@@ -139,7 +139,7 @@ def save_chat_history(session_data, pdf_name, bot_response_pdf, user_input, bot_
         
         chat_collection.insert_one(chat_data)
         
-        # Update report with chat_id if we have a report
+        # update report with chat_id if have a report
         if report_id:
             patient_report_collection.update_one(
                 {"report_id": report_id},
@@ -148,7 +148,7 @@ def save_chat_history(session_data, pdf_name, bot_response_pdf, user_input, bot_
         
         return chat_data["chat_id"]
     else:
-        # Update existing chat area
+        # update current chat area
         chat_collection.update_one(
             {"chat_id": chat_id},
             {
@@ -156,12 +156,12 @@ def save_chat_history(session_data, pdf_name, bot_response_pdf, user_input, bot_
                 "$set": {
                     "last_updated": timestamp,
                     "pdf_name": pdf_name,
-                    "report_id": report_id  # Update report reference if needed
+                    "report_id": report_id  
                 }
             }
         )
         
-        # Update title based on all messages
+        # update title based on all messages
         chat = chat_collection.find_one({"chat_id": chat_id})
         if chat:
             new_title = generate_chat_title(chat["messages"], chat.get("pdf_name"))
@@ -172,12 +172,12 @@ def save_chat_history(session_data, pdf_name, bot_response_pdf, user_input, bot_
         
         return chat_id
 
-# Home route - Login/Signup page
+# home page
 @app.get("/", response_class=HTMLResponse)
 async def show_signup(request: Request):
     return templates.TemplateResponse("login_page.html", {"request": request, "show_login": False})
 
-# After login index.html page will appear
+# after login index.html will open
 @app.get("/login", response_class=HTMLResponse)
 async def show_login(request: Request):
     if request.session and request.session.get("user"):
@@ -185,7 +185,7 @@ async def show_login(request: Request):
 
     return templates.TemplateResponse("login_page.html", {"request": request, "show_login": True})
 
-# Username will be displayed at url after login or signup
+# username will be displayed on url after login
 @app.get("/{username}/", response_class=HTMLResponse)
 async def user_dashboard(request: Request, username: str):
     session_data = request.session.get("user", {})
@@ -193,14 +193,14 @@ async def user_dashboard(request: Request, username: str):
         return RedirectResponse(url="/login")
     return templates.TemplateResponse("index.html", {"request": request, "username": username})
 
-# When user clicks chat the chatid along with that username will be displayed in url
+# when user clicks chat username with display with chatid
 @app.get("/{username}/{chat_id}", response_class=HTMLResponse)
 async def specific_chat(request: Request, username: str, chat_id: str):
     session_data = request.session.get("user", {})
     if not session_data or session_data.get("username") != username:
         return RedirectResponse(url="/login")
     
-    # Verify chat belongs to user
+    # verify chat of user
     chat = chat_collection.find_one({
         "chat_id": chat_id,
         "username": username
@@ -211,7 +211,7 @@ async def specific_chat(request: Request, username: str, chat_id: str):
         
     return templates.TemplateResponse("index.html", {"request": request, "username": username})
 
-# Signup Route
+# signup route
 @app.post("/api/signup", response_class=HTMLResponse)
 async def signup(request: Request, username: str = Form(...), email: EmailStr = Form(...), password: str = Form(...)):
     if user_collection.find_one({"email": email}):
@@ -234,7 +234,7 @@ async def signup(request: Request, username: str = Form(...), email: EmailStr = 
     request.session["user"] = {"username": username}
     return RedirectResponse(url=f"/{username}/")
 
-# Login Route
+# login route
 @app.post("/api/login", response_class=HTMLResponse)
 async def login(request: Request, username: str = Form(...), password: str = Form(...)):
         user = user_collection.find_one({"username": username})
@@ -250,13 +250,12 @@ async def login(request: Request, username: str = Form(...), password: str = For
         return RedirectResponse(url=f"/{username}/")
 
 
-# File Upload and AI Processing
-# Update the upload_file endpoint to handle PDF-only uploads
+# generate and update chat titles
 
 def generate_chat_title(messages, pdf_name=None):
     """Generate a concise chat title using Google's Generative AI."""
     try:
-        # If it's a PDF analysis, create a title based on the PDF content
+        # ff it's a PDF analysis, create a title based on the PDF content
         if pdf_name:
             first_message = next((msg for msg in messages if msg.get('bot_response_pdf')), None)
             if first_message and first_message.get('bot_response_pdf'):
@@ -266,11 +265,11 @@ def generate_chat_title(messages, pdf_name=None):
                 
                 Analysis: {pdf_content}"""
             else:
-                # Fallback to regular title generation
+                # fallback to regular title generation
                 prompt = f"""Generate a concise 2-3 word title that captures the main topic or theme of this conversation. 
                 Respond only with the title, no other text."""
         else:
-            # Combine messages into a single text for analysis
+            # combine messages into a single text for analysis
             combined_text = " ".join([
                 f"{msg.get('user_message', '')} {msg.get('bot_response', '')}" 
                 for msg in messages
@@ -281,13 +280,10 @@ def generate_chat_title(messages, pdf_name=None):
             
             Conversation: {combined_text}"""
         
-        # Generate title using Google AI
+        # generate title 
         response = genai.GenerativeModel(model_name="gemini-1.5-flash").generate_content([prompt])
         title = response.text.strip()
         
-        # Ensure title is not too long
-        # if len(title) > 30:
-        #     title = title[:27] + "..."
             
         return title
     except Exception as e:
@@ -368,14 +364,14 @@ async def upload_file(
                     )
                     structured_response["report_id"] = report_id
                     
-                    # Save chat history for PDF-only upload
+                    # save chat history for PDF-only upload
                     if not messageInput:
                         chat_id = save_chat_history(
                             session_data,
                             pdf_name,
                             bot_response_pdf,
-                            "PDF Upload: " + pdf_name,  # Use PDF filename as user message
-                            json.dumps(bot_response_pdf, indent=2),  # Store formatted PDF analysis
+                            "PDF Upload: " + pdf_name,  
+                            json.dumps(bot_response_pdf, indent=2), 
                             chatId
                         )
                         structured_response["chat_id"] = chat_id
@@ -396,7 +392,7 @@ async def upload_file(
             query_response = genai.GenerativeModel(model_name="gemini-1.5-flash").generate_content([query_prompt])
             structured_response["query_response"] = query_response.text.strip()
             
-            # Save chat with chat area ID
+            # save chat with chat area ID
             chat_id = save_chat_history(
                 session_data, 
                 pdf_name, 
@@ -436,14 +432,13 @@ async def get_patient_report(report_id: str):
     
     return JSONResponse(content=report)
 
-# Delete patient report
+# delete patient report
 @app.delete("/api/patient_report/{report_id}", response_class=JSONResponse)
 async def delete_patient_report(report_id: str, request: Request):
     session_data = request.session.get("user", {})
     if not session_data:
         return JSONResponse(content={"error": "User not logged in."})
     
-    # Get associated chat info first
     report = patient_report_collection.find_one({
         "report_id": report_id,
         "username": session_data["username"]
@@ -458,7 +453,6 @@ async def delete_patient_report(report_id: str, request: Request):
         "username": session_data["username"]
     })
     
-    # Update any chat that referenced this report
     if report.get("chat_id"):
         chat_collection.update_one(
             {"chat_id": report["chat_id"]},
@@ -467,7 +461,7 @@ async def delete_patient_report(report_id: str, request: Request):
     
     return JSONResponse(content={"message": "Patient report deleted successfully"})
     
-# Get User Chat Areas
+# get user chat areas
 @app.get("/api/chat_areas/{username}", response_class=JSONResponse)
 async def get_chat_areas(username: str):
     try:
@@ -479,7 +473,7 @@ async def get_chat_areas(username: str):
         if not chat_areas:
             return JSONResponse(content=[])
         
-        # Generate titles for each chat area
+        # generate titles for each chat area
         for chat in chat_areas:
             if chat.get("messages"):
                 chat["ai_title"] = generate_chat_title(chat["messages"])
@@ -490,7 +484,7 @@ async def get_chat_areas(username: str):
     except Exception as e:
         return JSONResponse(content={"error": f"Failed to load chat areas: {str(e)}"})
 
-# Get Specific Chat Area
+# get specific chat area
 @app.get("/api/chat_area/{chat_id}", response_class=JSONResponse)
 async def get_chat_area(chat_id: str):
     chat_area = chat_collection.find_one({"chat_id": chat_id}, {"_id": 0})
@@ -500,7 +494,7 @@ async def get_chat_area(chat_id: str):
     
     return JSONResponse(content=chat_area)
 
-# Get User Info
+# get user info
 @app.get("/api/user_info", response_class=JSONResponse)
 async def get_user_info(request: Request):
     session_data = request.session.get("user", {})
@@ -516,7 +510,7 @@ async def get_user_info(request: Request):
     
     return JSONResponse(content=user)
 
-# Delete Chat Area
+# delete chat area
 @app.delete("/api/chat_area/{chat_id}", response_class=JSONResponse)
 async def delete_chat_area(chat_id: str, request: Request):
     session_data = request.session.get("user", {})

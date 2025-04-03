@@ -26,11 +26,11 @@
                 <h1 class="logo">Blood Report</h1>
             </div>
             <div class="history">
-                <div class="new-chat">
+                <div class="new-chat" title="Create New Chat">
                     <i class='bx bx-plus plus-ico'></i>
                     <p>New chat</p>
                 </div>
-                <!-- Chat history will be dynamically displayed here -->
+                <!-- Chat history -->
             </div>
         </div>
 
@@ -44,7 +44,7 @@
             <div class="chat-container">
 
                 <div class="chatArea" id="chatArea">
-                    <!-- Chat messages will be dynamically displayed here -->
+                    <!-- Chat messages -->
                 </div>
             </div>
 
@@ -53,7 +53,7 @@
                     <div class="messageBox">
                         <!-- File upload container -->
                         <div id="selectedFileContainer" class="selectedFileContainer hidden">
-                            <div class="file-container">
+                            <div class="file-container" >
                                 <i class='bx bxs-file-pdf pdf-icon'></i>
                                 <span id="selectedFileName"></span>
                                 <button class="rm-btn" id="removeFileButton">
@@ -64,19 +64,19 @@
 
                         <!-- Message input -->
                         <div class="input-wrapper">
-                            <textarea id="messageInput" name="messageInput" placeholder="Ask anything about your blood test report" rows="1"></textarea>
+                            <textarea id="messageInput" name="messageInput" title="Write Message" placeholder="Ask anything about your blood test report" rows="1"></textarea>
                         </div>
 
                         <!-- File upload and send button -->
                         <div class="actions">
                             <div class="fileUploadWrapper">
-                                <div class="rounded">
+                                <div class="rounded" title="Upload PDF">
                                     <i class='bx bx-link-alt' id="file-uploader"></i>
                                 </div>
                                 <input type="file" id="file" name="file" accept="application/pdf" style="display: none;" />
                             </div>
 
-                            <button type="submit" id="sendButton" class="sendButton">
+                            <button type="submit" id="sendButton" class="sendButton" title="Click to send Message or PDF">
                                 <i class='bx bxl-telegram'></i>
                             </button>
                         </div>
