@@ -1,6 +1,9 @@
 # Blood Report Interpreter
 
 A web application that analyzes blood test reports (PDFs) using Google's Generative AI to extract key information, identify deficiencies, and provide personalized recommendations.
+![Login and Signup page](./static/images/image-1.png)
+![Main Interface of Chat](./static/images/image-2.png)
+![Patient Report Section](./static/images/image-3.png)
 
 ## Features
 
