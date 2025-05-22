@@ -1,3 +1,5 @@
+#To run --> poetry run python -m app.main 
+
 import os
 import json
 import webbrowser
